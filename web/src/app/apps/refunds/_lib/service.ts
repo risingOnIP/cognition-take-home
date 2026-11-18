@@ -1,9 +1,9 @@
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { audit } from "@acme/platform/audit";
 import type { Db } from "@acme/platform/db";
 import type { PaymentProcessor } from "@acme/platform/connectors";
-import { runIdempotent } from "@acme/platform/idempotency";
+import { IdempotencyInProgressError, runIdempotent } from "@acme/platform/idempotency";
 import { moneyField } from "@acme/platform/money";
 import { assertCan, can, rowScope, type CurrentUser } from "@acme/platform/rbac";
 import { WorkflowError } from "@acme/platform/workflow";
@@ -72,7 +72,13 @@ export function decideRefund(db: Db, user: CurrentUser, id: string, transition: 
   if (!current) throw new WorkflowError("Refund not found");
   const to = refundWorkflow.apply(transition, current, user, reason);
   return db.transaction((tx) => {
-    const updated = tx.update(refunds).set({ status: to, decidedBy: user.id, decidedAt: new Date().toISOString() }).where(eq(refunds.id, id)).returning().get();
+    const updated = tx
+      .update(refunds)
+      .set({ status: to, decidedBy: user.id, decidedAt: new Date().toISOString() })
+      .where(and(eq(refunds.id, id), eq(refunds.status, current.status)))
+      .returning()
+      .get();
+    if (!updated) throw new WorkflowError("This refund was changed by someone else. Reload and try again.");
     audit(tx, { actorId: user.id, app: APP, action: `refund.${transition}`, entity: { type: "refund", id }, before: { status: current.status }, after: { status: to }, reason });
     return updated;
   });
@@ -87,17 +93,25 @@ export async function payRefund(db: Db, user: CurrentUser, id: string, processor
   if (!current) throw new WorkflowError("Refund not found");
   refundWorkflow.apply("pay", current, user);
   const idempotencyKey = `refund:${id}`;
-  const { result, replayed } = await runIdempotent(db, "refunds.pay", idempotencyKey, () =>
-    processor.refund({ paymentId: current.paymentId, amountMinor: current.amountMinor, currency: current.currency, idempotencyKey }),
-  );
+  let outcome;
+  try {
+    outcome = await runIdempotent(db, "refunds.pay", idempotencyKey, () =>
+      processor.refund({ paymentId: current.paymentId, amountMinor: current.amountMinor, currency: current.currency, idempotencyKey }),
+    );
+  } catch (e) {
+    if (e instanceof IdempotencyInProgressError) throw new WorkflowError("This payout is already being processed.");
+    throw e;
+  }
+  const { result, replayed } = outcome;
   const to = result.status === "succeeded" ? "paid" : "failed";
   return db.transaction((tx) => {
     const updated = tx
       .update(refunds)
       .set({ status: to, paidBy: user.id, paidAt: result.processedAt, processorRefundId: result.refundId })
-      .where(eq(refunds.id, id))
+      .where(and(eq(refunds.id, id), eq(refunds.status, current.status)))
       .returning()
       .get();
+    if (!updated) throw new WorkflowError("This refund was changed by someone else. Reload and try again.");
     audit(tx, {
       actorId: user.id,
       app: APP,
