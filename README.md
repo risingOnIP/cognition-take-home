@@ -12,7 +12,7 @@ It has two parts:
 
 ## Run it
 
-Requires Node 20.9+. No env vars, secrets or external services.
+Requires Node 22+. No env vars, secrets or external services.
 
 ```bash
 npm install
