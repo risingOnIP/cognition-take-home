@@ -45,34 +45,34 @@ const delta = [
   {
     title: "Access (AAA)",
     today: [
-      "Authorization is real: every page and action checks Entra group → app role → permission on the server; app admins map groups to roles.",
-      "Accounting is real: every change is written to the hash-chained, append-only audit log, per app and platform-wide.",
+      "Authorization and accounting are real: server-side group → role → permission checks, app admins map Entra groups to roles, and every change is audited.",
       "Authentication is simulated: a user picker and seeded groups stand in for Microsoft Entra ID.",
     ],
     change: [
       "Register an Entra app and swap demoIdentityProvider for entraIdentityProvider in web/src/platform.ts.",
-      "Users and groups then come from the tenant's sign-in claims. No app code changes.",
+      "Users and groups then come from the tenant's sign-in claims; no app code changes.",
     ],
   },
   {
     title: "Data",
     today: [
-      "SQLite with deterministic fake data, rebuilt by npm run db:reset.",
-      "Drizzle schema in code: shared platform tables (users, groups, group roles, audit events, idempotency keys), one app-prefixed table set per app, versioned migrations.",
+      "SQLite with deterministic fake data. Drizzle schema in code: shared platform tables, one app-prefixed table set per app, versioned migrations.",
       "SharePoint documents connector over Microsoft Graph, running on a mock.",
     ],
     change: [
-      "Switch the Drizzle dialect to Postgres or Azure SQL (sqliteTable → pgTable) and regenerate migrations; services query through Drizzle, so they barely change.",
-      "Replace seed data with real data or read from existing systems via connectors.",
-      "Add SharePoint credentials if they keep files or lists there.",
+      "Switch the Drizzle dialect to Postgres or Azure SQL and regenerate migrations; services barely change.",
+      "Load real data or read existing systems through connectors; add SharePoint credentials if needed.",
     ],
   },
   {
     title: "Hosting",
-    today: ["Runs locally with npm run dev. Not decided, not locked in."],
+    today: [
+      "Runs locally with npm run dev: a standard Next.js app plus a database.",
+      "No host chosen yet, and nothing ties it to one.",
+    ],
     change: [
-      "Deploy the standard Next.js app plus database anywhere Node runs: Azure App Service, AWS, Vercel or their own Kubernetes.",
-      "Add secrets management and environments (staging, production).",
+      "Deploy anywhere Node runs: Azure App Service, AWS, Vercel or their own Kubernetes.",
+      "Add secrets management and staging/production environments.",
     ],
   },
 ];
@@ -147,9 +147,9 @@ export default function Home() {
           <h2 className="text-center text-lg font-semibold">Delta from prototype to real world</h2>
           <div className="mt-6 grid gap-4 text-sm md:grid-cols-3">
             {delta.map((d) => (
-              <div key={d.title} className="flex flex-col rounded-xl border border-line bg-surface p-5">
+              <div key={d.title} className="grid grid-rows-[auto_1fr_1fr] gap-3 rounded-xl border border-line bg-surface p-5">
                 <h3 className="font-semibold">{d.title}</h3>
-                <div className="mt-3 rounded-lg bg-slate-50 p-3">
+                <div className="rounded-lg bg-slate-50 p-3">
                   <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">Today</div>
                   <ul className="mt-1 space-y-1.5 text-slate-600">
                     {d.today.map((pt) => (
@@ -157,7 +157,7 @@ export default function Home() {
                     ))}
                   </ul>
                 </div>
-                <div className="mt-3 flex-1 rounded-lg border border-dashed border-brand-200 bg-brand-50/40 p-3">
+                <div className="rounded-lg border border-dashed border-brand-200 bg-brand-50/40 p-3">
                   <div className="text-[11px] font-semibold uppercase tracking-wide text-brand-700">To go live</div>
                   <ul className="mt-1 space-y-1.5 text-slate-600">
                     {d.change.map((pt) => (

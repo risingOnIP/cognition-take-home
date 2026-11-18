@@ -29,6 +29,7 @@ Sign in at `/login` with the user picker (the stand-in for Entra SSO). Suggested
 | Priya Shah (agent) | sg-support | Raise a refund. Sees only her own refunds. |
 | Elena Rossi (approver) | sg-payments | Approve ≤ $5,000, reveal a customer email (reason required, audited). Opens `/apps/refunds/admin` to map Entra groups to Refunds roles. |
 | Sam Okafor (finance) | sg-finance | Approve above $5,000, execute payouts through the mock processor. |
+| Grace Kim / Diego Alvarez (compliance) | sg-compliance / sg-compliance-leads | `/apps/kyc`: Grace sees only her assigned cases; Diego sees all, reassigns, signs off high-risk cases and administers the app. |
 | Jordan Blake (internal audit) | sg-internal-audit | `/audit`: platform-wide audit log + chain verification. |
 | Avery Demo (superuser) | sg-demo-superusers | Every app: Refunds approver + finance, KYC lead, auditor. Can't raise refunds (SoD). |
 | Chris Park (engineer) | sg-engineering | Sees no apps; direct URLs redirect to `/forbidden`. |
@@ -79,20 +80,20 @@ Groups stand in for the company's existing Entra ID groups. Each app's admin map
 npm run new-app -- chargebacks "Chargebacks"   # scaffolds web/src/app/apps/chargebacks and registers it
 ```
 
-Then follow `devin/playbooks/new-internal-app.md`, or give Devin the same playbook (`!new-internal-app …`).
+Then follow `devin/playbooks/new-internal-app.md`, or ask Devin to build the app with a one-paragraph brief; it picks up the `new-internal-app` skill in `.agents/skills/` and the playbook.
 
 ## Devin assets
 
 - `AGENTS.md` and `.agents/skills/`: picked up automatically by Devin sessions in this repo.
-- `devin/knowledge/`: architecture, fintech guardrails, commands. Load into Devin Knowledge.
-- `devin/playbooks/`: new internal app; add a platform primitive.
+- `devin/knowledge/`: architecture, fintech guardrails, access management, UI conventions, ALM, repo commands. Load into Devin Knowledge.
+- `devin/playbooks/`: new internal app; add a platform primitive; add a maintenance bot.
 - `devin/bots/`: weekly dependency/security sweep, PR guardrail review, docs sync, quarterly access review. Onboarding: `devin/playbooks/add-maintenance-bot.md`, listed at `/bots`.
 
 ## Repo layout
 
 ```
 platform/src/   auth rbac registry audit workflow pii money idempotency connectors forms ui db testing
-web/src/app/    page.tsx (launcher)  login/  admin/  apps/<key>/{manifest.ts,_lib/,page.tsx,…}
+web/src/app/    page.tsx (platform home)  login/  audit/  primitives/  knowledge/  playbooks/  bots/  apps/<key>/{manifest.ts,_lib/,admin/,page.tsx,…}
 web/drizzle/    SQL migrations (one history for platform + app tables)
 web/scripts/    migrate, seed, reset, new-app (+ templates)
 devin/          knowledge/ playbooks/ bots/
@@ -106,8 +107,8 @@ npm run typecheck && npm run lint && npm test && npm run build
 
 ## Not in this prototype (deliberately)
 
-Real Entra OIDC login (adapter is there, no tenant), Postgres (Drizzle makes the switch mostly a driver change),
-notifications/Teams, the feature-flag app, usage analytics, mobile/offline, and deployment/hosting.
+Real Entra OIDC login (adapter is there, no tenant), Postgres (switch the Drizzle dialect and regenerate migrations),
+notifications/Teams, the feature-flag app, usage analytics, mobile/offline, and deployment/hosting. The home page's "Delta from prototype to real world" section lists what changes for each.
 
 ## Optional: connect SharePoint
 
