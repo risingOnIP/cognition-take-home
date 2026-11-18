@@ -106,3 +106,13 @@ npm run typecheck && npm run lint && npm test && npm run build
 
 Real Entra OIDC login (adapter is there, no tenant), Postgres (Drizzle makes the switch mostly a driver change),
 notifications/Teams, the feature-flag app, usage analytics, mobile/offline, and deployment/hosting.
+
+## Optional: connect SharePoint
+
+Supporting documents on a refund come from a `DocumentStore` (`@acme/platform/connectors`). With no configuration the demo uses a seeded in-memory library. To use a real SharePoint document library, register an Entra app with the Graph `Sites.Selected` (or `Files.ReadWrite.All`) application permission and set:
+
+```bash
+SHAREPOINT_TENANT_ID=...  SHAREPOINT_CLIENT_ID=...  SHAREPOINT_CLIENT_SECRET=...  SHAREPOINT_SITE_ID=...  # SHAREPOINT_DRIVE_ID optional
+```
+
+Files are read from `refunds/<refund id>/` in that library.

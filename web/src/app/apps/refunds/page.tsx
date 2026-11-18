@@ -20,7 +20,16 @@ export default async function RefundsPage() {
       <PageHeader
         title="Refunds"
         description={can(user, "refunds.view_all") ? "All refund requests across the support team." : "Refunds you have raised. Approvals happen with a team lead or above."}
-        actions={can(user, "refunds.request") && <LinkButton href={`${refundsApp.href}/new`}>New refund</LinkButton>}
+        actions={
+          <div className="flex gap-2">
+            {can(user, "refunds.admin") && (
+              <LinkButton href={`${refundsApp.href}/admin`} variant="secondary">
+                Admin
+              </LinkButton>
+            )}
+            {can(user, "refunds.request") && <LinkButton href={`${refundsApp.href}/new`}>New refund</LinkButton>}
+          </div>
+        }
       />
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Awaiting your action" value={awaitingMe.length} tone={awaitingMe.length ? "warning" : undefined} hint="Based on your approval limit" />

@@ -9,17 +9,19 @@ const all = [...powerAppsPrimitives, ...fintechPrimitives];
 const pick = (...names: string[]): PrimitiveInfo[] => names.map((n) => all.find((p) => p.name === n)).filter((p): p is PrimitiveInfo => !!p);
 
 const groups: PrimitiveGroup[] = [
-  { key: "access", title: "Access", blurb: "Entra groups → roles → permissions", items: pick("Identity & SSO", "Groups, roles, permissions", "Row-level security", "Segregation of duties") },
+  { key: "access", title: "Access & admin", blurb: "Entra groups → roles → permissions", items: pick("Identity & SSO", "Groups, roles, permissions", "Row-level security", "Segregation of duties", "App admin view") },
   { key: "audit", title: "Audit trail", blurb: "Every change logged, tamper-evident", items: pick("Tamper-evident audit log") },
   { key: "approvals", title: "Approvals", blurb: "Maker-checker and amount limits", items: pick("Workflows & approvals", "Maker-checker", "Approval limits") },
   { key: "pii", title: "PII protection", blurb: "Masked by default, audited reveal", items: pick("PII masking & break-glass") },
-  { key: "money", title: "Money & payouts", blurb: "Integer cents, run-once payouts", items: pick("Money safety", "Idempotent side effects", "Connectors") },
+  { key: "money", title: "Money & payouts", blurb: "Integer cents, run-once payouts", items: pick("Money safety", "Idempotent side effects") },
+  { key: "connectors", title: "Connectors", blurb: "SharePoint documents, payment processor", items: pick("SharePoint documents", "Payment connector") },
   { key: "ui", title: "UI kit", blurb: "Tables, forms, app shell", items: pick("Data tables", "Forms & business rules", "Shell & theme", "App registry & launcher") },
+  { key: "delivery", title: "Guardrails & delivery", blurb: "CI checks, PR review, migrations", items: pick("Guardrails in CI", "ALM") },
 ];
 
 const steps = [
   { title: "Brief", text: "An engineer describes the tool in a paragraph." },
-  { title: "Devin builds", text: "Follows the playbook and composes the primitives." },
+  { title: "Devin builds", text: "Builds on the shared primitives; writes only what's unique to the app." },
   { title: "CI checks", text: "Fails the build if access checks or audit are missing." },
   { title: "Review & ship", text: "Human approves the PR; access comes from Entra." },
 ];
@@ -55,7 +57,7 @@ export default function Home() {
           <div className="rounded-2xl border border-brand-100 bg-brand-50/60 p-5">
             <div className="mb-3 flex items-baseline justify-between">
               <h2 className="text-sm font-semibold text-brand-900">Shared primitives</h2>
-              <span className="text-xs text-muted">Click a module for details</span>
+              <span className="text-xs text-muted">Click a group for details</span>
             </div>
             <PrimitiveDiagram groups={groups} />
           </div>

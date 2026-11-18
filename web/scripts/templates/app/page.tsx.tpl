@@ -1,5 +1,5 @@
 import { can } from "@acme/platform/rbac";
-import { Card, DataTable, PageHeader, SchemaForm, StatusBadge } from "@acme/platform/ui";
+import { Card, DataTable, LinkButton, PageHeader, SchemaForm, StatusBadge } from "@acme/platform/ui";
 import { db, requirePageAccess } from "@/platform";
 import { createItemAction } from "./_lib/actions";
 import { listItems } from "./_lib/service";
@@ -10,7 +10,7 @@ export default async function __Pascal__Page() {
   const items = listItems(db(), user);
   return (
     <>
-      <PageHeader title={__camel__App.name} description={__camel__App.description} />
+      <PageHeader title={__camel__App.name} description={__camel__App.description} actions={can(user, "__key__.admin") && <LinkButton href={`${__camel__App.href}/admin`} variant="secondary">Admin</LinkButton>} />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <DataTable

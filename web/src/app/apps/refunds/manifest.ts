@@ -15,6 +15,7 @@ export const refundsApp = defineApp({
     "refunds.approve.tier2": "Approve or reject refunds up to $5,000",
     "refunds.approve.tier3": "Approve or reject refunds above $5,000",
     "refunds.pay": "Execute approved refunds via the payment processor",
+    "refunds.admin": "See who has access to Refunds and its activity log",
     "refunds.pii.reveal": "Reveal customer contact details",
   },
   roles: [
@@ -24,7 +25,7 @@ export const refundsApp = defineApp({
       key: "refunds.manager",
       name: "Payments manager",
       description: "Approves refunds up to $5,000.",
-      permissions: ["refunds.view", "refunds.view_all", "refunds.approve.tier1", "refunds.approve.tier2", "refunds.pii.reveal"],
+      permissions: ["refunds.view", "refunds.view_all", "refunds.approve.tier1", "refunds.approve.tier2", "refunds.pii.reveal", "refunds.admin"],
     },
     {
       key: "refunds.finance",

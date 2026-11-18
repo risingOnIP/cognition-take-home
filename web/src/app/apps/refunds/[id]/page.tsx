@@ -5,7 +5,7 @@ import { maskPii } from "@acme/platform/pii";
 import { can } from "@acme/platform/rbac";
 import { Alert, AuditTimeline, Card, DescriptionList, MaskedValue, PageHeader, StatusBadge, WorkflowActions } from "@acme/platform/ui";
 import { approvalTier } from "@acme/platform/workflow";
-import { db, requirePageAccess } from "@/platform";
+import { db, documentStore, requirePageAccess } from "@/platform";
 import { revealCustomerEmailAction, transitionRefundAction, userNames } from "../_lib/actions";
 import { REASON_CODES } from "../_lib/schema";
 import { getRefund } from "../_lib/service";
@@ -18,6 +18,7 @@ export default async function RefundDetail({ params }: { params: Promise<{ id: s
   const refund = getRefund(db(), user, id);
   if (!refund) notFound();
   const names = await userNames();
+  const documents = await documentStore.list(`refunds/${refund.id}`);
   const tier = approvalTier(APPROVAL_TIERS, refund.amountMinor);
   const available = refundWorkflow.available(refund, user);
   const nextTransition = refund.status === "approved" ? "pay" : "approve";
@@ -55,6 +56,22 @@ export default async function RefundDetail({ params }: { params: Promise<{ id: s
               ]}
             />
             {refund.notes && <p className="mt-4 rounded-md bg-slate-50 p-3 text-sm">{refund.notes}</p>}
+          </Card>
+          <Card title="Supporting documents" actions={<span className="text-xs text-muted">{documentStore.name === "sharepoint" ? "SharePoint" : "SharePoint (mock)"}</span>}>
+            {documents.length ? (
+              <ul className="divide-y divide-line text-sm">
+                {documents.map((doc) => (
+                  <li key={doc.id} className="flex items-center justify-between py-2">
+                    <a href={doc.webUrl} target="_blank" rel="noreferrer" className="font-medium text-brand-700 hover:underline">
+                      {doc.name}
+                    </a>
+                    <span className="text-xs text-muted">{Math.round(doc.sizeBytes / 1024)} KB</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted">No documents.</p>
+            )}
           </Card>
           <Card title="History (from audit trail)">
             <AuditTimeline events={listAuditEvents(db(), { entityType: "refund", entityId: refund.id }).reverse()} actorNames={names} />

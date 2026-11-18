@@ -19,7 +19,8 @@
     "./ui/theme.css": "./src/ui/theme.css",
     ".": "./src/index.ts",
     "./testing": "./src/testing/index.ts",
-    "./catalog": "./src/catalog/index.ts"
+    "./catalog": "./src/catalog/index.ts",
+    "./admin": "./src/admin/index.ts"
   },
   "scripts": {
     "test": "vitest run",

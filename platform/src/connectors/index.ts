@@ -28,3 +28,5 @@ export function createMockPaymentProcessor(opts: { latencyMs?: number } = {}): P
     },
   };
 }
+
+export * from "./documents";

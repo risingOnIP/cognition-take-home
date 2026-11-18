@@ -12,10 +12,11 @@ export const __camel__App = defineApp({
     "__key__.view_all": "See items created by anyone (otherwise only your own)",
     "__key__.create": "Create items",
     "__key__.approve": "Approve or reject items",
+    "__key__.admin": "See who has access to __name__ and its activity log",
   },
   roles: [
     { key: "__key__.member", name: "Member", description: "Creates items.", permissions: ["__key__.view", "__key__.create"] },
-    { key: "__key__.approver", name: "Approver", description: "Approves items.", permissions: ["__key__.view", "__key__.view_all", "__key__.approve"] },
+    { key: "__key__.approver", name: "Approver", description: "Approves items.", permissions: ["__key__.view", "__key__.view_all", "__key__.approve", "__key__.admin"] },
   ],
   sodConflicts: [],
 });
