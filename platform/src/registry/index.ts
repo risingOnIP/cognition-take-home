@@ -35,33 +35,18 @@ export function defineApp<const M extends AppManifest>(manifest: M): M {
   return manifest;
 }
 
-/** Built-in app: directory, access management and the audit trail. */
+/** Built-in app: the platform-wide audit log. Visible only to groups mapped to the auditor role. */
 export const platformAdminApp = defineApp({
   key: "admin",
-  name: "Security",
-  description: "Assign Entra groups to roles, review who has access, segregation-of-duties checks and the audit trail.",
-  href: "/security",
+  name: "Audit log",
+  description: "Every change in every app, append-only and hash-chained. For internal audit and compliance.",
+  href: "/audit",
   owner: "Platform Engineering",
-  accessPermission: "admin.view",
+  accessPermission: "audit.view",
   permissions: {
-    "admin.view": "Open Security",
-    "admin.roles.manage": "Assign or remove roles on groups",
-    "audit.view": "Read the audit trail",
+    "audit.view": "Read the platform-wide audit log",
   },
-  roles: [
-    {
-      key: "platform.admin",
-      name: "Platform admin",
-      description: "Manages group-to-role assignments.",
-      permissions: ["admin.view", "admin.roles.manage", "audit.view"],
-    },
-    {
-      key: "platform.auditor",
-      name: "Auditor",
-      description: "Read-only access to directory and audit trail.",
-      permissions: ["admin.view", "audit.view"],
-    },
-  ],
+  roles: [{ key: "platform.auditor", name: "Auditor", description: "Read-only access to the audit log across all apps.", permissions: ["audit.view"] }],
 });
 
 export interface RoleCatalog {

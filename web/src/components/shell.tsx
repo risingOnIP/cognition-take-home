@@ -10,7 +10,7 @@ export async function Shell({ children }: { children: ReactNode }) {
     { href: "/primitives", label: "Primitives" },
     { href: "/knowledge", label: "Knowledge" },
     { href: "/playbooks", label: "Playbooks" },
-    ...(can(user, "admin.view") ? [{ href: "/security", label: "Security" }] : []),
+    ...(can(user, "audit.view") ? [{ href: "/audit", label: "Audit log" }] : []),
   ];
   return (
     <AppShell

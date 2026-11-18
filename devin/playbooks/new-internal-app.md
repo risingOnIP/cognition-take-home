@@ -25,4 +25,4 @@
 
 ## Done when
 - The app shows in the launcher only for the intended groups, and the CI conformance tests pass.
-- Every state change appears in `/security/audit` and the app's admin Activity tab and the hash chain verifies.
+- Every state change appears in `/audit` (auditors) and the app's admin Activity tab and the hash chain verifies.

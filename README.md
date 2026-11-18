@@ -30,7 +30,7 @@ Sign in at `/login` with the user picker (the stand-in for Entra SSO). Suggested
 | Marcus Lee (team lead) | sg-refunds-leads | Approve ≤ $500. Can't approve a $1,200 refund or his own request. |
 | Elena Rossi (payments manager) | sg-payments-managers | Approve ≤ $5,000. Reveal a customer email (asks for a reason, audited). |
 | Sam Okafor (finance ops) | sg-finance-ops | Approve any amount, execute payouts through the mock processor. |
-| Alex Morgan (platform admin) | sg-platform-admins | `/admin`: group → role mapping, SoD violations, audit log + chain verification. |
+| Jordan Blake (internal audit) | sg-internal-audit | `/audit`: platform-wide audit log + chain verification. |
 | Chris Park (engineer) | none | Sees no apps; direct URLs redirect to `/forbidden`. |
 
 Taylor Nguyen is deliberately in both the agents and finance groups so `/admin` shows a segregation-of-duties violation.

@@ -1,5 +1,6 @@
-import Link from "next/link";
 import type { AppAccessSummary } from "../admin";
+import type { FormState } from "../forms";
+import { SchemaForm } from "./schema-form";
 import { AuditLogTable } from "./audit-log-table";
 import { Alert, Badge, Card } from "./primitives";
 import { TabNav } from "./tab-nav";
@@ -7,7 +8,23 @@ import { TabNav } from "./tab-nav";
 export type AppAdminTab = "access" | "activity";
 
 /** Standard admin view every app gets, split into two tabs: Access and Activity. */
-export function AppAdminView({ summary, baseHref, tab, actorNames = {} }: { summary: AppAccessSummary; baseHref: string; tab: AppAdminTab; actorNames?: Record<string, string> }) {
+export function AppAdminView({
+  summary,
+  baseHref,
+  tab,
+  actorNames = {},
+  groupOptions = [],
+  changeRole,
+}: {
+  summary: AppAccessSummary;
+  baseHref: string;
+  tab: AppAdminTab;
+  actorNames?: Record<string, string>;
+  /** Entra groups (from the tenant) the admin can map to this app's roles. */
+  groupOptions?: { value: string; label: string }[];
+  /** Server action that calls changeAppRole; omit for a read-only view. */
+  changeRole?: (state: FormState, formData: FormData) => Promise<FormState>;
+}) {
   return (
     <>
       <TabNav
@@ -26,14 +43,8 @@ export function AppAdminView({ summary, baseHref, tab, actorNames = {} }: { summ
           ) : (
             <p className="text-sm text-emerald-700">✓ No segregation-of-duties conflicts</p>
           )}
-          <Card
-            title="Who can do what"
-            actions={
-              <Link href="/security" className="text-sm text-brand-700 hover:underline">
-                Change in Security →
-              </Link>
-            }
-          >
+          <div className="grid gap-4 lg:grid-cols-3">
+          <Card title="Who can do what" className="lg:col-span-2">
             <table className="w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr>
@@ -58,6 +69,21 @@ export function AppAdminView({ summary, baseHref, tab, actorNames = {} }: { summ
               </tbody>
             </table>
           </Card>
+          {changeRole && (
+            <Card title="Map an Entra group to a role">
+              <SchemaForm
+                action={changeRole}
+                submitLabel="Save"
+                fields={[
+                  { name: "op", label: "Change", type: "select", options: [{ value: "grant", label: "Grant" }, { value: "revoke", label: "Revoke" }], required: true },
+                  { name: "groupId", label: "Entra group", type: "select", options: groupOptions, required: true },
+                  { name: "roleKey", label: "Role", type: "select", options: summary.roles.map((r) => ({ value: r.key, label: r.name })), required: true },
+                  { name: "reason", label: "Ticket / reason", placeholder: "ACCESS-123", required: true },
+                ]}
+              />
+            </Card>
+          )}
+          </div>
         </div>
       ) : (
         <AuditLogTable events={summary.recentActivity} actorNames={actorNames} />

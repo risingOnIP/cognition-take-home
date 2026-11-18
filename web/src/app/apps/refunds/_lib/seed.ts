@@ -29,10 +29,10 @@ export function seedRefunds(db: Db) {
   db.transaction((tx) => {
     tx.insert(groupRoles)
       .values([
-        { groupId: "g_refunds_agents", roleKey: "refunds.agent" },
-        { groupId: "g_refunds_leads", roleKey: "refunds.lead" },
-        { groupId: "g_payments_managers", roleKey: "refunds.manager" },
-        { groupId: "g_finance_ops", roleKey: "refunds.finance" },
+        { groupId: "g_support", roleKey: "refunds.agent" },
+        { groupId: "g_support_leads", roleKey: "refunds.lead" },
+        { groupId: "g_payments", roleKey: "refunds.manager" },
+        { groupId: "g_finance", roleKey: "refunds.finance" },
       ])
       .run();
 

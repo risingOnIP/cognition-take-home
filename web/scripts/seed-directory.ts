@@ -1,7 +1,8 @@
 import { groupMembers, groupRoles, groups, users, type Db } from "@acme/platform/db";
 
 /**
- * Mirrors what would come from Entra ID: users, security groups and memberships.
+ * Stand-in for the company's existing Entra ID tenant: users, security groups and memberships.
+ * In production these are read from Entra (token claims / Graph), not seeded.
  * Apps add their own group -> role mappings in their seed (see src/app/apps/<app>/_lib/seed.ts).
  */
 export const DIRECTORY = {
@@ -18,25 +19,24 @@ export const DIRECTORY = {
     { id: "u_chris", displayName: "Chris Park", email: "chris.park@acmepay.com", jobTitle: "Software Engineer", department: "Engineering" },
   ],
   groups: [
-    { id: "g_platform_admins", name: "sg-platform-admins", description: "Platform engineering admins" },
-    { id: "g_internal_audit", name: "sg-internal-audit", description: "Internal audit (read-only)" },
-    { id: "g_refunds_agents", name: "sg-refunds-agents", description: "Support agents who raise refunds" },
-    { id: "g_refunds_leads", name: "sg-refunds-leads", description: "Support team leads" },
-    { id: "g_payments_managers", name: "sg-payments-managers", description: "Payments operations managers" },
-    { id: "g_finance_ops", name: "sg-finance-ops", description: "Finance operations (payouts)" },
-    { id: "g_kyc_analysts", name: "sg-kyc-analysts", description: "KYC analysts" },
-    { id: "g_kyc_leads", name: "sg-kyc-leads", description: "Compliance leads" },
+    { id: "g_support", name: "sg-support", description: "Customer support agents" },
+    { id: "g_support_leads", name: "sg-support-leads", description: "Customer support team leads" },
+    { id: "g_payments", name: "sg-payments", description: "Payments operations" },
+    { id: "g_finance", name: "sg-finance", description: "Finance operations" },
+    { id: "g_compliance", name: "sg-compliance", description: "Compliance analysts" },
+    { id: "g_compliance_leads", name: "sg-compliance-leads", description: "Compliance leads" },
+    { id: "g_internal_audit", name: "sg-internal-audit", description: "Internal audit" },
+    { id: "g_engineering", name: "sg-engineering", description: "Engineering" },
   ],
   memberships: {
-    g_platform_admins: ["u_alex"],
+    g_support: ["u_priya", "u_taylor"],
+    g_support_leads: ["u_marcus"],
+    g_payments: ["u_elena"],
+    g_finance: ["u_sam"],
+    g_compliance: ["u_grace"],
+    g_compliance_leads: ["u_diego"],
     g_internal_audit: ["u_jordan"],
-    g_refunds_agents: ["u_priya", "u_taylor"],
-    g_refunds_leads: ["u_marcus"],
-    g_payments_managers: ["u_elena"],
-    // Taylor is intentionally also in finance ops: a segregation-of-duties violation the admin app flags.
-    g_finance_ops: ["u_sam"],
-    g_kyc_analysts: ["u_grace"],
-    g_kyc_leads: ["u_diego"],
+    g_engineering: ["u_alex", "u_chris"],
   } as Record<string, string[]>,
 };
 
@@ -53,7 +53,6 @@ export function seedDirectory(db: Db) {
       .run();
     tx.insert(groupRoles)
       .values([
-        { groupId: "g_platform_admins", roleKey: "platform.admin" },
         { groupId: "g_internal_audit", roleKey: "platform.auditor" },
       ])
       .run();

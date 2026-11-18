@@ -48,7 +48,7 @@ export default async function AppsIndex() {
             </>
           );
           return canOpen ? (
-            <Link key={a.key} href={a.href} className="rounded-lg border border-line bg-surface p-5 shadow-sm transition hover:border-brand-500 hover:shadow">
+            <Link key={a.key} href={a.href} target="_blank" rel="noreferrer" className="rounded-lg border border-line bg-surface p-5 shadow-sm transition hover:border-brand-500 hover:shadow">
               {body}
             </Link>
           ) : (
