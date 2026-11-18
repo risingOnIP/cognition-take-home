@@ -21,7 +21,7 @@ export function AppShell({
   return (
     <div className="flex min-h-screen">
       <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-line bg-surface">
-        <Link href="/apps" className="flex items-center gap-2 border-b border-line px-5 py-4">
+        <Link href="/" className="flex items-center gap-2 border-b border-line px-5 py-4">
           <span className="grid h-8 w-8 place-items-center rounded-md bg-brand-600 text-sm font-bold text-white">{orgName[0]}</span>
           <span>
             <span className="block text-sm font-semibold leading-tight">{orgName}</span>
@@ -29,8 +29,11 @@ export function AppShell({
           </span>
         </Link>
         <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
+          <Link href="/" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
+            Platform
+          </Link>
           <Link href="/apps" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
-            Platform overview
+            All apps
           </Link>
           <div className="px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-muted">Your apps</div>
           {apps.map((a) => (
