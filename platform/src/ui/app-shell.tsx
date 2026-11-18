@@ -32,6 +32,12 @@ export function AppShell({
           <Link href="/" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
             Platform
           </Link>
+          <Link href="/primitives" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
+            Primitives
+          </Link>
+          <Link href="/devin" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
+            Devin setup
+          </Link>
           <Link href="/apps" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
             All apps
           </Link>
