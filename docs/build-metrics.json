@@ -11,10 +11,12 @@
   {
     "app": "kyc",
     "what": "KYC review queue",
-    "how": "Separate Devin session given only the playbook and a one-paragraph brief",
-    "wallClockMinutes": null,
+    "how": "Fresh Devin session given only the current primitives, knowledge, playbook and a one-paragraph brief; no platform/ changes",
+    "wallClockMinutes": 4,
     "acus": null,
     "humanInput": "None during the build",
-    "session": "https://app.devin.ai/sessions/a6e30c4f325d411ea0c41c6779d48cd4"
+    "session": "https://app.devin.ai/sessions/f573ebec6d724541b5275df666a07a8d",
+    "pr": "https://github.com/risingOnIP/cognition-take-home/pull/3",
+    "notes": "4 min to PR opened with tests and screenshots; ~9 min to green CI. ACUs were reported as 0.0 by the API at the time of writing."
   }
 ]

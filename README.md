@@ -50,7 +50,7 @@ Groups stand in for the company's existing Entra ID groups. Each app's admin map
 | Galleries, Excel export | `DataTable`: search, filters, sort, paging, CSV export |
 | Forms + business rules | `SchemaForm` + Zod (`@acme/platform/forms`), validated on the server |
 | Power Automate approvals | `@acme/platform/workflow`: state machine with permissions, required reasons, tiered limits |
-| Connectors | `@acme/platform/connectors`: typed interface; mock payment processor |
+| Connectors | `@acme/platform/connectors`: typed interface; mock payment processor; SharePoint documents via Microsoft Graph (mock without credentials) |
 | Themes | `@acme/platform/ui` + `theme.css`: shared shell and tokens |
 | Solutions / ALM | Git, PRs, CI, migrations (better than Power Apps here) |
 
@@ -71,7 +71,7 @@ Groups stand in for the company's existing Entra ID groups. Each app's admin map
 | App | Route | What it shows |
 |---|---|---|
 | Refunds | `/apps/refunds` | Tiered approval (≤$5k approver, above that finance), maker-checker, row-level security, PII reveal, idempotent payouts via a connector, full audit history |
-| KYC review | `/apps/kyc` | Built by a separate Devin session from the playbook. See `docs/BUILD_LOG.md` |
+| KYC review | `/apps/kyc` | Analyst/lead queue, SLA breaches, masked PII with audited reveal, lead sign-off for high risk, maker-checker on escalations. Built in 4 min by a fresh Devin session from the playbook ([PR #3](https://github.com/risingOnIP/cognition-take-home/pull/3)); see `docs/BUILD_LOG.md` |
 
 ## Adding an app
 

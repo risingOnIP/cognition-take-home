@@ -12,7 +12,7 @@ export default function LoginPage() {
     .map((u) => loadUser(db(), catalog, u.id)!)
     .filter(Boolean);
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
+    <main className="mx-auto max-w-6xl px-6 py-16">
       <div className="mb-8">
         <div className="mb-3 grid h-10 w-10 place-items-center rounded-lg bg-brand-600 font-bold text-white">A</div>
         <h1 className="text-2xl font-semibold">Sign in as…</h1>
@@ -20,11 +20,11 @@ export default function LoginPage() {
           Demo stand-in for Microsoft Entra ID SSO. Each person&apos;s access comes only from their Entra security groups, mapped to app roles.
         </p>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {people.map((u) => (
-          <form key={u.id} action={signInAs}>
+          <form key={u.id} action={signInAs} className="h-full">
             <input type="hidden" name="userId" value={u.id} />
-            <button className="w-full rounded-lg border border-line bg-surface p-4 text-left shadow-sm transition hover:border-brand-500 hover:shadow">
+            <button className="flex h-full w-full flex-col rounded-lg border border-line bg-surface p-4 text-left shadow-sm transition hover:border-brand-500 hover:shadow">
               <div className="font-medium">{u.displayName}</div>
               <div className="text-xs text-muted">{u.jobTitle}</div>
               <div className="mt-2 flex flex-wrap gap-1">

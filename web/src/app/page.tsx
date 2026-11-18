@@ -3,31 +3,34 @@ import { LinkButton } from "@acme/platform/ui";
 import { Shell } from "@/components/shell";
 import { platform } from "@/platform";
 
-const foundations: { href: string; title: string; what: string; examples: string[]; tone?: "bot" }[] = [
+const foundations: { href: string; title: string; what: string; examples: string[]; badge: "Build" | "Maintain" }[] = [
   {
     href: "/primitives",
     title: "Shared primitives",
     what: "Reusable code every app imports, written and reviewed once.",
     examples: ["Entra sign-in & roles", "Audit log", "Maker-checker approvals", "PII masking", "SharePoint connector"],
+    badge: "Build",
   },
   {
     href: "/knowledge",
     title: "Knowledge",
     what: "The rules Devin applies automatically in this repo.",
     examples: ["Fintech guardrails", "Access management", "UI conventions"],
+    badge: "Build",
   },
   {
     href: "/playbooks",
     title: "Playbooks",
     what: "Step-by-step procedures Devin follows, on demand or on a schedule.",
     examples: ["Build a new internal app", "Add a primitive", "Add a maintenance bot"],
+    badge: "Build",
   },
   {
     href: "/bots",
     title: "Bots",
     what: "Scheduled Devin sessions that keep apps and the platform maintained.",
     examples: ["Weekly dependency & security sweep", "PR guardrail review", "Quarterly access review"],
-    tone: "bot",
+    badge: "Maintain",
   },
 ];
 
@@ -56,9 +59,10 @@ export default function Home() {
         <section className="mt-14">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {foundations.map((f) => (
-              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition ${f.tone === "bot" ? "border-slate-200 bg-slate-50 hover:border-slate-500" : "border-brand-100 bg-brand-50/60 hover:border-brand-500"}`}>
+              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition border-brand-100 bg-brand-50/60 hover:border-brand-500`}>
                 <div className="flex items-baseline justify-between">
-                  <h2 className={`font-semibold ${f.tone === "bot" ? "text-slate-900" : "text-brand-900"}`}>{f.title}</h2>
+                  <h2 className="font-semibold text-brand-900">{f.title}</h2>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${f.badge === "Build" ? "bg-brand-100 text-brand-700" : "bg-slate-200 text-slate-700"}`}>{f.badge}</span>
                   <span className="text-brand-700 opacity-0 transition group-hover:opacity-100">→</span>
                 </div>
                 <p className="mt-1 text-sm text-slate-600">{f.what}</p>

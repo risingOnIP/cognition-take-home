@@ -8,3 +8,5 @@ trigger: Building or changing any page or component in an internal app
 - Lead each page with a `PageHeader` that says what the page is for in one sentence. Use breadcrumbs for sub-pages.
 - Status feedback in plain words: "✓ No segregation-of-duties conflicts" beats an empty section.
 - Hide actions the user can't perform (`can(user, ...)`), but always enforce on the server too.
+- Read the clock (`Date.now()`) in the service layer and pass it in; the `react-hooks/purity` lint rejects it in page components.
+- Open apps from the launcher and catalog in a new tab (`target="_blank"`).
