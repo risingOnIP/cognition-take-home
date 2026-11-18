@@ -1,0 +1,22 @@
+import { defineApp } from "@acme/platform/registry";
+
+export const __camel__App = defineApp({
+  key: "__key__",
+  name: "__name__",
+  description: "TODO: one sentence describing what this app is for.",
+  href: "/apps/__key__",
+  owner: "TODO: owning team",
+  accessPermission: "__key__.view",
+  permissions: {
+    "__key__.view": "Open __name__",
+    "__key__.view_all": "See items created by anyone (otherwise only your own)",
+    "__key__.create": "Create items",
+    "__key__.approve": "Approve or reject items",
+    "__key__.admin": "See who has access to __name__ and its activity log",
+  },
+  roles: [
+    { key: "__key__.member", name: "Member", description: "Creates items.", permissions: ["__key__.view", "__key__.create"] },
+    { key: "__key__.approver", name: "Approver", description: "Approves items.", permissions: ["__key__.view", "__key__.view_all", "__key__.approve", "__key__.admin"] },
+  ],
+  sodConflicts: [],
+});

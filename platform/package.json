@@ -1,0 +1,47 @@
+{
+  "name": "@acme/platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./db": "./src/db/index.ts",
+    "./auth": "./src/auth/index.ts",
+    "./rbac": "./src/rbac/index.ts",
+    "./audit": "./src/audit/index.ts",
+    "./workflow": "./src/workflow/index.ts",
+    "./pii": "./src/pii/index.ts",
+    "./money": "./src/money/index.ts",
+    "./idempotency": "./src/idempotency/index.ts",
+    "./connectors": "./src/connectors/index.ts",
+    "./registry": "./src/registry/index.ts",
+    "./forms": "./src/forms/index.ts",
+    "./ui": "./src/ui/index.ts",
+    "./ui/theme.css": "./src/ui/theme.css",
+    ".": "./src/index.ts",
+    "./testing": "./src/testing/index.ts",
+    "./catalog": "./src/catalog/index.ts",
+    "./admin": "./src/admin/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.2.0",
+    "drizzle-orm": "^0.45.0",
+    "zod": "^4.0.0"
+  },
+  "peerDependencies": {
+    "next": ">=16",
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "drizzle-kit": "^0.31.11",
+    "next": "^16.4.6",
+    "typescript": "^5",
+    "vitest": "^5.1.1"
+  }
+}

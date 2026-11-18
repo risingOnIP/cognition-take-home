@@ -1,0 +1,22 @@
+[
+  {
+    "app": "refunds",
+    "what": "Platform primitives + Refunds app + Devin assets",
+    "how": "One Devin session, planned interactively with an engineer",
+    "wallClockMinutes": null,
+    "acus": null,
+    "humanInput": "Planning chat and design decisions",
+    "session": "https://app.devin.ai/sessions/dc8b9cb6b30c4cdfb788039a5ec752b1"
+  },
+  {
+    "app": "kyc",
+    "what": "KYC review queue",
+    "how": "Fresh Devin session given only the current primitives, knowledge, playbook and a one-paragraph brief; no platform/ changes",
+    "wallClockMinutes": 4,
+    "acus": null,
+    "humanInput": "None during the build",
+    "session": "https://app.devin.ai/sessions/f573ebec6d724541b5275df666a07a8d",
+    "pr": "https://github.com/risingOnIP/cognition-take-home/pull/3",
+    "notes": "4 min to PR opened with tests and screenshots; ~9 min to green CI. ACUs were reported as 0.0 by the API at the time of writing."
+  }
+]

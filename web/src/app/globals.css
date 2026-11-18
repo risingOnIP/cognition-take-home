@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@acme/platform/ui/theme.css";
+
+/* Platform UI components live outside this package; tell Tailwind to scan them. */
+@source "../../../platform/src";
