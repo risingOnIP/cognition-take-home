@@ -37,8 +37,35 @@ const foundations: { href: string; title: string; what: string; examples: string
 const steps = [
   { title: "Brief", text: "An engineer describes the tool in a paragraph." },
   { title: "Devin builds", text: "Follows the playbook, imports the primitives, writes only what's unique to the app." },
-  { title: "Automated checks", text: "CI blocks the PR if any page or action skips a permission check or audit." },
-  { title: "Review & ship", text: "A human approves the PR. The app's admin maps Entra groups to its roles." },
+  { title: "Review & ship", text: "CI runs the checks, a human approves the PR, and the app's admin maps Entra groups to its roles." },
+  { title: "Maintain with Devin bots", text: "Scheduled bots patch dependencies, review every PR against the guardrails and run quarterly access reviews." },
+];
+
+const delta = [
+  {
+    title: "Access: only sign-in is simulated",
+    points: [
+      "Authorization is real: every page and action checks Entra group → app role → permission on the server, and each app's admin page maps groups to roles.",
+      "Accounting is real: every change is written to the hash-chained, append-only audit log, visible per app and platform-wide for internal audit.",
+      "Authentication is the only simulated part: a user picker stands in for Microsoft Entra ID. Going live means registering an Entra app and swapping demoIdentityProvider for entraIdentityProvider; no app code changes.",
+    ],
+  },
+  {
+    title: "Data: demo database, real structure",
+    points: [
+      "Today: SQLite with deterministic fake data, rebuilt by npm run db:reset.",
+      "Structure: Drizzle ORM schema in code, with shared platform tables (users, groups, group roles, audit events, idempotency keys), one app-prefixed table set per app, and versioned migrations in web/drizzle/.",
+      "Real database: switch the Drizzle dialect to Postgres or Azure SQL (sqliteTable → pgTable in the schema files) and regenerate migrations. App code queries through Drizzle, never a driver, so services barely change.",
+      "SharePoint: a documents connector over Microsoft Graph is already in the platform (mock without credentials) if they keep files or lists there.",
+    ],
+  },
+  {
+    title: "Hosting: not decided, not locked in",
+    points: [
+      "A standard Next.js app plus a database.",
+      "Runs anywhere Node runs: Azure App Service, AWS, Vercel or their own Kubernetes.",
+    ],
+  },
 ];
 
 export default function Home() {
@@ -59,10 +86,10 @@ export default function Home() {
         <section className="mt-14">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {foundations.map((f) => (
-              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition border-brand-100 bg-brand-50/60 hover:border-brand-500`}>
+              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition ${f.badge === "Maintain" ? "border-emerald-200 bg-emerald-50/70 hover:border-emerald-500" : "border-brand-100 bg-brand-50/60 hover:border-brand-500"}`}>
                 <div className="flex items-baseline justify-between">
-                  <h2 className="font-semibold text-brand-900">{f.title}</h2>
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${f.badge === "Build" ? "bg-brand-100 text-brand-700" : "bg-slate-200 text-slate-700"}`}>{f.badge}</span>
+                  <h2 className={`font-semibold ${f.badge === "Maintain" ? "text-emerald-900" : "text-brand-900"}`}>{f.title}</h2>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${f.badge === "Build" ? "bg-brand-100 text-brand-700" : "bg-emerald-100 text-emerald-800"}`}>{f.badge}</span>
                   <span className="text-brand-700 opacity-0 transition group-hover:opacity-100">→</span>
                 </div>
                 <p className="mt-1 text-sm text-slate-600">{f.what}</p>
@@ -107,18 +134,19 @@ export default function Home() {
           </ol>
         </section>
 
-        <section className="mt-16 grid gap-4 text-sm md:grid-cols-2">
-          <div className="rounded-xl border border-line bg-surface p-5">
-            <h3 className="font-semibold">Access: real today, sign-in simulated</h3>
-            <p className="mt-2 text-slate-600">
-              Every page and action checks Entra group → app role → permission on the server. The demo uses a user picker and seeded groups in place of your tenant; connecting Entra login (swap <code>demoIdentityProvider</code> for <code>entraIdentityProvider</code>) is the one remaining step.
-            </p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface p-5">
-            <h3 className="font-semibold">Hosting: not decided, not locked in</h3>
-            <p className="mt-2 text-slate-600">
-              A standard Next.js app plus a database. It runs anywhere Node runs: Azure App Service, AWS, Vercel or your own Kubernetes. SQLite is for the demo; production would use Postgres or Azure SQL.
-            </p>
+        <section className="mt-16">
+          <h2 className="text-center text-lg font-semibold">Delta from prototype to real world</h2>
+          <div className="mt-6 grid gap-4 text-sm md:grid-cols-3">
+            {delta.map((d) => (
+              <div key={d.title} className="rounded-xl border border-line bg-surface p-5">
+                <h3 className="font-semibold">{d.title}</h3>
+                <ul className="mt-2 space-y-2 text-slate-600">
+                  {d.points.map((pt) => (
+                    <li key={pt}>{pt}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </section>
       </div>
