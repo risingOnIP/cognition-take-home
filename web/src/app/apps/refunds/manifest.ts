@@ -33,5 +33,8 @@ export const refundsApp = defineApp({
       permissions: ["refunds.view", "refunds.view_all", "refunds.approve.tier1", "refunds.approve.tier2", "refunds.approve.tier3", "refunds.pay", "refunds.pii.reveal"],
     },
   ],
-  sodConflicts: [["refunds.agent", "refunds.finance", "People who raise refunds must not also execute payouts"]],
+  sodConflicts: [
+    ["refunds.agent", "refunds.finance", "People who raise refunds must not also execute payouts"],
+    ["refunds.lead", "refunds.finance", "People who raise refunds must not also execute payouts"],
+  ],
 });
