@@ -12,7 +12,12 @@ It has two parts:
 
 ## Run it
 
-Requires Node 22.13+ (latest Node 22 LTS recommended; `.nvmrc` included). No env vars, secrets or external services.
+**Minimum Node version: 22.13** (latest Node 22 LTS recommended). Check with `node -v`. `npm install`, `npm run setup` and `npm run dev` stop with a clear message if Node is older. To update:
+
+- Windows: `winget upgrade OpenJS.NodeJS.LTS` (or download the LTS installer from https://nodejs.org)
+- macOS/Linux with nvm: `nvm install` (reads `.nvmrc`)
+
+No env vars, secrets or external services.
 
 **Windows:** clone outside OneDrive (OneDrive locks `node_modules` and causes `EPERM` errors). `better-sqlite3` downloads a prebuilt binary for supported Node versions; if `npm install` falls back to `node-gyp rebuild` and fails with "Could not find any Visual Studio installation", either update to the latest Node 22 LTS and retry, or install Visual Studio Build Tools with the "Desktop development with C++" workload. Then delete `node_modules` and run `npm install` again.
 
