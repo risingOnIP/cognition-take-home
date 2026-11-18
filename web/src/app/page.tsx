@@ -3,7 +3,7 @@ import { LinkButton } from "@acme/platform/ui";
 import { Shell } from "@/components/shell";
 import { platform } from "@/platform";
 
-const foundations = [
+const foundations: { href: string; title: string; what: string; examples: string[]; tone?: "bot" }[] = [
   {
     href: "/primitives",
     title: "Shared primitives",
@@ -20,7 +20,14 @@ const foundations = [
     href: "/playbooks",
     title: "Playbooks",
     what: "Step-by-step procedures Devin follows, on demand or on a schedule.",
-    examples: ["Build a new internal app", "Add a primitive", "Weekly security sweep"],
+    examples: ["Build a new internal app", "Add a primitive", "Add a maintenance bot"],
+  },
+  {
+    href: "/bots",
+    title: "Bots",
+    what: "Scheduled Devin sessions that keep apps and the platform maintained.",
+    examples: ["Weekly dependency & security sweep", "PR guardrail review", "Quarterly access review"],
+    tone: "bot",
   },
 ];
 
@@ -35,7 +42,7 @@ export default function Home() {
   const apps = platform.apps.filter((a) => a.href.startsWith("/apps/"));
   return (
     <Shell>
-      <div className="mx-auto max-w-4xl py-4">
+      <div className="mx-auto max-w-5xl py-4">
         <header className="text-center">
           <h1 className="text-3xl font-semibold tracking-tight">Internal Tools Platform</h1>
           <p className="mx-auto mt-3 max-w-2xl text-slate-600">
@@ -47,11 +54,11 @@ export default function Home() {
         </header>
 
         <section className="mt-14">
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {foundations.map((f) => (
-              <Link key={f.href} href={f.href} className="group rounded-2xl border border-brand-100 bg-brand-50/60 p-5 transition hover:border-brand-500">
+              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition ${f.tone === "bot" ? "border-amber-200 bg-amber-50 hover:border-amber-500" : "border-brand-100 bg-brand-50/60 hover:border-brand-500"}`}>
                 <div className="flex items-baseline justify-between">
-                  <h2 className="font-semibold text-brand-900">{f.title}</h2>
+                  <h2 className={`font-semibold ${f.tone === "bot" ? "text-amber-900" : "text-brand-900"}`}>{f.title}</h2>
                   <span className="text-brand-700 opacity-0 transition group-hover:opacity-100">→</span>
                 </div>
                 <p className="mt-1 text-sm text-slate-600">{f.what}</p>
@@ -65,7 +72,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col items-center py-2 text-muted">
-            <span className="text-[11px] uppercase tracking-wider">used to build</span>
+            <span className="text-[11px] uppercase tracking-wider">build and maintain</span>
             <span className="text-lg leading-none">↓</span>
           </div>
 

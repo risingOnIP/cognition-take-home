@@ -10,6 +10,7 @@ export async function Shell({ children }: { children: ReactNode }) {
     { href: "/primitives", label: "Primitives" },
     { href: "/knowledge", label: "Knowledge" },
     { href: "/playbooks", label: "Playbooks" },
+    { href: "/bots", label: "Bots" },
     ...(can(user, "audit.view") ? [{ href: "/audit", label: "Audit log" }] : []),
   ];
   return (

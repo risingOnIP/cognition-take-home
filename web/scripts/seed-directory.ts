@@ -16,6 +16,7 @@ export const DIRECTORY = {
     { id: "u_diego", displayName: "Diego Alvarez", email: "diego.alvarez@acmepay.com", jobTitle: "Compliance Lead", department: "Compliance" },
     { id: "u_alex", displayName: "Alex Morgan", email: "alex.morgan@acmepay.com", jobTitle: "Platform Engineer", department: "Engineering" },
     { id: "u_jordan", displayName: "Jordan Blake", email: "jordan.blake@acmepay.com", jobTitle: "Internal Auditor", department: "Risk" },
+    { id: "u_avery", displayName: "Avery Demo", email: "avery.demo@acmepay.com", jobTitle: "Demo superuser (every app)", department: "Demo" },
     { id: "u_chris", displayName: "Chris Park", email: "chris.park@acmepay.com", jobTitle: "Software Engineer", department: "Engineering" },
   ],
   groups: [
@@ -26,6 +27,7 @@ export const DIRECTORY = {
     { id: "g_compliance_leads", name: "sg-compliance-leads", description: "Compliance leads" },
     { id: "g_internal_audit", name: "sg-internal-audit", description: "Internal audit" },
     { id: "g_engineering", name: "sg-engineering", description: "Engineering" },
+    { id: "g_demo_superusers", name: "sg-demo-superusers", description: "Demo only: every app role that does not break segregation of duties" },
   ],
   memberships: {
     g_support: ["u_priya", "u_taylor", "u_marcus"],
@@ -35,6 +37,7 @@ export const DIRECTORY = {
     g_compliance_leads: ["u_diego"],
     g_internal_audit: ["u_jordan"],
     g_engineering: ["u_alex", "u_chris"],
+    g_demo_superusers: ["u_avery"],
   } as Record<string, string[]>,
 };
 
@@ -52,6 +55,8 @@ export function seedDirectory(db: Db) {
     tx.insert(groupRoles)
       .values([
         { groupId: "g_internal_audit", roleKey: "platform.auditor" },
+        // Demo superuser: every admin/approver role. Not refunds.agent, which would conflict with refunds.finance (SoD).
+        ...["platform.auditor", "refunds.approver", "refunds.finance", "kyc.lead"].map((roleKey) => ({ groupId: "g_demo_superusers", roleKey })),
       ])
       .run();
   });

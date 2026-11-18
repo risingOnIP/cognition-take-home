@@ -11,7 +11,7 @@
 1. Read `AGENTS.md` and `devin/knowledge/*.md`. Look at `web/src/app/apps/refunds/` as the reference app.
 2. `npm install && npm run setup`, then create a branch.
 3. Scaffold: `npm run new-app -- <key> "<Name>"`.
-4. `manifest.ts`: declare permissions (`<key>.<verb>`), roles (`<key>.<role>`) and any `sodConflicts`.
+4. `manifest.ts`: declare permissions (`<key>.<verb>`), roles (`<key>.<role>`) and any `sodConflicts`. Keep to 2–3 roles; give `<key>.admin` to the owner role (see `access-management.md`). The scaffold adds `/apps/<key>/admin` (Access + Activity tabs).
 5. `_lib/schema.ts`: tables prefixed with the app key. Money is `integer` minor units. Store the maker in `createdBy`.
 6. `_lib/workflow.ts`: model statuses and transitions with `defineWorkflow`. Use `makerChecker` for approvals, `requireReason` for rejections/escalations, and `approvalTier` for amount limits.
 7. `_lib/service.ts`: plain functions `(db, user, …)`. Each starts with `assertCan`. Each write uses `db.transaction` + `audit(tx, …)`. Apply row-level scope for lists. Mask PII with `maskPii`.

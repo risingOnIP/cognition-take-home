@@ -33,6 +33,21 @@ export default function LoginPage() {
                 ))}
                 {!u.groups.length && <Badge>no groups</Badge>}
               </div>
+              <div className="mt-2 space-y-0.5 text-xs">
+                {u.roles.length ? (
+                  u.roles.map((r) => {
+                    const role = catalog.roles.get(r);
+                    const app = catalog.apps.find((a) => a.key === role?.app);
+                    return (
+                      <div key={r}>
+                        <span className="text-muted">{app?.name ?? role?.app}:</span> <span className="font-medium">{role?.name ?? r}</span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-muted">No app access</div>
+                )}
+              </div>
             </button>
           </form>
         ))}

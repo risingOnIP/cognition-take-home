@@ -30,6 +30,7 @@ Sign in at `/login` with the user picker (the stand-in for Entra SSO). Suggested
 | Elena Rossi (approver) | sg-payments | Approve ≤ $5,000, reveal a customer email (reason required, audited). Opens `/apps/refunds/admin` to map Entra groups to Refunds roles. |
 | Sam Okafor (finance) | sg-finance | Approve above $5,000, execute payouts through the mock processor. |
 | Jordan Blake (internal audit) | sg-internal-audit | `/audit`: platform-wide audit log + chain verification. |
+| Avery Demo (superuser) | sg-demo-superusers | Every app: Refunds approver + finance, KYC lead, auditor. Can't raise refunds (SoD). |
 | Chris Park (engineer) | sg-engineering | Sees no apps; direct URLs redirect to `/forbidden`. |
 
 Groups stand in for the company's existing Entra ID groups. Each app's admin maps groups to that app's roles; the platform blocks mappings that break segregation of duties.
@@ -85,7 +86,7 @@ Then follow `devin/playbooks/new-internal-app.md`, or give Devin the same playbo
 - `AGENTS.md` and `.agents/skills/`: picked up automatically by Devin sessions in this repo.
 - `devin/knowledge/`: architecture, fintech guardrails, commands. Load into Devin Knowledge.
 - `devin/playbooks/`: new internal app; add a platform primitive.
-- `devin/bots/`: weekly dependency/security sweep, PR guardrail review, docs sync, quarterly access review.
+- `devin/bots/`: weekly dependency/security sweep, PR guardrail review, docs sync, quarterly access review. Onboarding: `devin/playbooks/add-maintenance-bot.md`, listed at `/bots`.
 
 ## Repo layout
 
