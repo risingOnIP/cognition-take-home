@@ -27,6 +27,7 @@ export function appAccessSummary(db: DbOrTx, catalog: RoleCatalog, app: AppManif
     .select({ groupId: groupMembers.groupId, displayName: users.displayName })
     .from(groupMembers)
     .innerJoin(users, eq(users.id, groupMembers.userId))
+    .where(eq(users.active, true))
     .all();
   const appRoleKeys = new Set(app.roles.map((r) => r.key));
   return {
