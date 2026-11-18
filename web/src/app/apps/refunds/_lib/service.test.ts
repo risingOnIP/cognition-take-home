@@ -15,8 +15,7 @@ async function setup() {
     db,
     agent: createTestUser(db, catalog, "agent", ["refunds.agent"]),
     otherAgent: createTestUser(db, catalog, "agent2", ["refunds.agent"]),
-    lead: createTestUser(db, catalog, "lead", ["refunds.lead"]),
-    manager: createTestUser(db, catalog, "manager", ["refunds.manager"]),
+    manager: createTestUser(db, catalog, "manager", ["refunds.approver"]),
     finance: createTestUser(db, catalog, "finance", ["refunds.finance"]),
   };
 }
@@ -25,21 +24,24 @@ const input = { paymentId: "pay_abc", customerName: "Jane Doe", customerEmail: "
 
 describe("refunds service", () => {
   it("routes approval by amount and enforces maker-checker", async () => {
-    const { db, agent, lead, manager } = await setup();
+    const { db, agent, manager, finance } = await setup();
+    const large = createRefund(db, agent, { ...input, amount: 900_000 });
+    expect(() => decideRefund(db, manager, large.id, "approve", null)).toThrow(/large/);
+    expect(decideRefund(db, finance, large.id, "approve", null).status).toBe("approved");
     const r = createRefund(db, agent, input);
-    expect(() => decideRefund(db, lead, r.id, "approve", null)).toThrow(/tier2/);
     expect(decideRefund(db, manager, r.id, "approve", null).status).toBe("approved");
 
-    const own = createRefund(db, lead, { ...input, amount: 1_000 });
-    expect(() => decideRefund(db, lead, own.id, "approve", null)).toThrow(/Maker-checker/);
+    const both = createTestUser(db, catalog, "both", ["refunds.agent", "refunds.approver"]);
+    const own = createRefund(db, both, { ...input, amount: 1_000 });
+    expect(() => decideRefund(db, both, own.id, "approve", null)).toThrow(/Maker-checker/);
   });
 
   it("applies row-level security", async () => {
-    const { db, agent, otherAgent, lead } = await setup();
+    const { db, agent, otherAgent, manager } = await setup();
     const r = createRefund(db, agent, input);
     expect(listRefunds(db, otherAgent)).toHaveLength(0);
     expect(getRefund(db, otherAgent, r.id)).toBeNull();
-    expect(listRefunds(db, lead)).toHaveLength(1);
+    expect(listRefunds(db, manager)).toHaveLength(1);
   });
 
   it("pays out idempotently via the connector and audits every step", async () => {

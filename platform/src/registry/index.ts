@@ -1,7 +1,7 @@
 export type Permission = string;
 
 export interface RoleDef {
-  /** Globally unique, e.g. `refunds.manager`. Assigned to Entra groups via `group_roles`. */
+  /** Globally unique, e.g. `refunds.approver`. Assigned to Entra groups via `group_roles`. */
   key: string;
   name: string;
   description: string;

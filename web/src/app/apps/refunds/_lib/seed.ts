@@ -30,8 +30,7 @@ export function seedRefunds(db: Db) {
     tx.insert(groupRoles)
       .values([
         { groupId: "g_support", roleKey: "refunds.agent" },
-        { groupId: "g_support_leads", roleKey: "refunds.lead" },
-        { groupId: "g_payments", roleKey: "refunds.manager" },
+        { groupId: "g_payments", roleKey: "refunds.approver" },
         { groupId: "g_finance", roleKey: "refunds.finance" },
       ])
       .run();
@@ -42,7 +41,7 @@ export function seedRefunds(db: Db) {
       const amountMinor = pick(AMOUNTS);
       const status = i < 6 ? "pending_approval" : pick(statuses);
       const maker = rand() < 0.5 ? "u_priya" : "u_taylor";
-      const checker = amountMinor <= 50_000 ? "u_marcus" : amountMinor <= 500_000 ? "u_elena" : "u_sam";
+      const checker = amountMinor <= 500_000 ? "u_elena" : "u_sam";
       const id = `RF-${1001 + i}`;
       const createdHoursAgo = 2 + (28 - i) * 9 + Math.floor(rand() * 6);
       const createdAt = hoursAgo(createdHoursAgo);

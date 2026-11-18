@@ -2,9 +2,8 @@ import { approvalTier, defineWorkflow, type ApprovalTier } from "@acme/platform/
 import type { Refund, RefundStatus } from "./schema";
 
 export const APPROVAL_TIERS: ApprovalTier[] = [
-  { maxMinor: 50_000, permission: "refunds.approve.tier1", label: "Team lead (≤ $500)" },
-  { maxMinor: 500_000, permission: "refunds.approve.tier2", label: "Payments manager (≤ $5,000)" },
-  { permission: "refunds.approve.tier3", label: "Finance (> $5,000)" },
+  { maxMinor: 500_000, permission: "refunds.approve.standard", label: "Approver (≤ $5,000)" },
+  { permission: "refunds.approve.large", label: "Finance (> $5,000)" },
 ];
 
 const tierPermission = (r: Refund) => approvalTier(APPROVAL_TIERS, r.amountMinor).permission;

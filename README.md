@@ -26,14 +26,15 @@ Sign in at `/login` with the user picker (the stand-in for Entra SSO). Suggested
 
 | Persona | Groups | Try |
 |---|---|---|
-| Priya Shah (agent) | sg-refunds-agents | Raise a refund. Sees only her own refunds. |
-| Marcus Lee (team lead) | sg-refunds-leads | Approve ≤ $500. Can't approve a $1,200 refund or his own request. |
-| Elena Rossi (payments manager) | sg-payments-managers | Approve ≤ $5,000. Reveal a customer email (asks for a reason, audited). |
-| Sam Okafor (finance ops) | sg-finance-ops | Approve any amount, execute payouts through the mock processor. |
+| Priya Shah (agent) | sg-support | Raise a refund. Sees only her own refunds. |
+| Elena Rossi (approver) | sg-payments | Approve ≤ $5,000, reveal a customer email (reason required, audited). Opens `/apps/refunds/admin` to map Entra groups to Refunds roles. |
+| Sam Okafor (finance) | sg-finance | Approve above $5,000, execute payouts through the mock processor. |
 | Jordan Blake (internal audit) | sg-internal-audit | `/audit`: platform-wide audit log + chain verification. |
-| Chris Park (engineer) | none | Sees no apps; direct URLs redirect to `/forbidden`. |
+| Chris Park (engineer) | sg-engineering | Sees no apps; direct URLs redirect to `/forbidden`. |
 
-Taylor Nguyen is deliberately in both the agents and finance groups so `/admin` shows a segregation-of-duties violation.
+Groups stand in for the company's existing Entra ID groups. Each app's admin maps groups to that app's roles; the platform blocks mappings that break segregation of duties.
+
+**Hosting** is not decided and nothing here depends on a specific host: it is a standard Next.js app plus a database, deployable to Azure App Service, AWS, Vercel or Kubernetes. SQLite is for the demo; production would use Postgres or Azure SQL.
 
 ## What the platform provides
 
@@ -44,7 +45,7 @@ Taylor Nguyen is deliberately in both the agents and finance groups so `/admin` 
 | Entra ID sign-in, security groups | `@acme/platform/auth`: `IdentityProvider` interface; demo cookie provider; `entraIdentityProvider` + `syncEntraClaims` adapter (users/groups keyed by Entra object ID) |
 | Dataverse security roles | `@acme/platform/rbac`: Entra group → role → permission; `can`, `assertCan`, `requirePermission` (server-enforced) |
 | Dataverse row-level security | `rowScope()`; out-of-scope records 404 |
-| App catalog / admin center | `@acme/platform/registry`: app manifests drive the launcher, nav, role catalog and `/admin` |
+| App catalog / admin center | `@acme/platform/registry`: app manifests drive the launcher, nav, role catalog and each app's `/apps/<key>/admin` |
 | Galleries, Excel export | `DataTable`: search, filters, sort, paging, CSV export |
 | Forms + business rules | `SchemaForm` + Zod (`@acme/platform/forms`), validated on the server |
 | Power Automate approvals | `@acme/platform/workflow`: state machine with permissions, required reasons, tiered limits |
@@ -59,7 +60,7 @@ Taylor Nguyen is deliberately in both the agents and finance groups so `/admin` 
 | Tamper-evident audit trail | `audit()` writes in the same transaction as the change; SHA-256 hash chain; DB triggers make `audit_events` append-only; `verifyAuditChain()` |
 | Maker-checker (four eyes) | `makerChecker: true` on workflow transitions |
 | Approval limits | `approvalTier()` + tiered permissions |
-| Segregation of duties | `sodConflicts` in manifests; `/admin` blocks conflicting grants and lists violations |
+| Segregation of duties | `sodConflicts` in manifests; app admin pages block conflicting grants and list any violations from Entra membership |
 | PII masking, break-glass reveal | `maskPii()` on the server; `revealPii()` needs permission + reason and is audited |
 | Money safety | Integer minor units, `parseMoneyToMinor`/`formatMoney`; `runIdempotent()` on payouts |
 | Guardrails in CI | `web/src/conformance.test.ts` fails if an app skips `requirePermission`, `requirePageAccess` or `audit`, or uses floats for money |
@@ -68,7 +69,7 @@ Taylor Nguyen is deliberately in both the agents and finance groups so `/admin` 
 
 | App | Route | What it shows |
 |---|---|---|
-| Refunds | `/apps/refunds` | Tiered approval (≤$500 lead, ≤$5k manager, above that finance), maker-checker, row-level security, PII reveal, idempotent payouts via a connector, full audit history |
+| Refunds | `/apps/refunds` | Tiered approval (≤$5k approver, above that finance), maker-checker, row-level security, PII reveal, idempotent payouts via a connector, full audit history |
 | KYC review | `/apps/kyc` | Built by a separate Devin session from the playbook. See `docs/BUILD_LOG.md` |
 
 ## Adding an app

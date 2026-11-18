@@ -20,7 +20,6 @@ export const DIRECTORY = {
   ],
   groups: [
     { id: "g_support", name: "sg-support", description: "Customer support agents" },
-    { id: "g_support_leads", name: "sg-support-leads", description: "Customer support team leads" },
     { id: "g_payments", name: "sg-payments", description: "Payments operations" },
     { id: "g_finance", name: "sg-finance", description: "Finance operations" },
     { id: "g_compliance", name: "sg-compliance", description: "Compliance analysts" },
@@ -29,8 +28,7 @@ export const DIRECTORY = {
     { id: "g_engineering", name: "sg-engineering", description: "Engineering" },
   ],
   memberships: {
-    g_support: ["u_priya", "u_taylor"],
-    g_support_leads: ["u_marcus"],
+    g_support: ["u_priya", "u_taylor", "u_marcus"],
     g_payments: ["u_elena"],
     g_finance: ["u_sam"],
     g_compliance: ["u_grace"],
