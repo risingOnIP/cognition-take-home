@@ -78,7 +78,7 @@ export default async function AppsIndex() {
                   <td className="px-4 py-3 font-medium">{m.what}</td>
                   <td className="px-4 py-3 text-slate-700">{m.how}</td>
                   <td className="px-4 py-3">{formatMinutes(m.wallClockMinutes)}</td>
-                  <td className="px-4 py-3">{m.acus ?? "pending"}</td>
+                  <td className="px-4 py-3">{m.acus ?? "see usage page"}</td>
                   <td className="px-4 py-3 text-slate-700">{m.humanInput}</td>
                   <td className="px-4 py-3">
                     {m.session ? (
