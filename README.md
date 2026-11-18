@@ -12,7 +12,9 @@ It has two parts:
 
 ## Run it
 
-Requires Node 22+. No env vars, secrets or external services.
+Requires Node 22.13+ (latest Node 22 LTS recommended; `.nvmrc` included). No env vars, secrets or external services.
+
+**Windows:** clone outside OneDrive (OneDrive locks `node_modules` and causes `EPERM` errors). `better-sqlite3` downloads a prebuilt binary for supported Node versions; if `npm install` falls back to `node-gyp rebuild` and fails with "Could not find any Visual Studio installation", either update to the latest Node 22 LTS and retry, or install Visual Studio Build Tools with the "Desktop development with C++" workload. Then delete `node_modules` and run `npm install` again.
 
 ```bash
 npm install
