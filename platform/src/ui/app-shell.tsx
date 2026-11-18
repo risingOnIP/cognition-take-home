@@ -2,9 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { CurrentUser } from "../rbac";
 import type { AppManifest } from "../registry";
-import { Badge } from "./primitives";
 
-const linkClass = "rounded-md px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-ink";
+const linkClass = "whitespace-nowrap rounded-md px-2.5 py-1.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-ink";
 
 /** Shared chrome: top bar with platform links, an Apps menu filtered by permission, and the signed-in user. */
 export function AppShell({
@@ -29,7 +28,7 @@ export function AppShell({
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-6">
           <Link href="/" className="flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-md bg-brand-600 text-sm font-bold text-white">{orgName[0]}</span>
-            <span className="text-sm font-semibold">{orgName} Internal Tools</span>
+            <span className="whitespace-nowrap text-sm font-semibold">{orgName}</span>
           </Link>
           <nav className="flex items-center gap-1">
             {platformNav.map((l) => (
@@ -55,12 +54,9 @@ export function AppShell({
           <div className="ml-auto flex items-center gap-3 text-right">
             <div>
               <div className="text-sm font-medium leading-tight">{user.displayName}</div>
-              <div className="text-xs text-muted">{user.jobTitle ?? user.email}</div>
+              <div className="text-xs text-muted" title={user.roles.join(", ")}>{user.roles.length} role{user.roles.length === 1 ? "" : "s"}</div>
             </div>
-            <div className="hidden max-w-xs flex-wrap justify-end gap-1 lg:flex">
-              {user.roles.length ? user.roles.map((r) => <Badge key={r} tone="brand">{r}</Badge>) : <Badge>no roles</Badge>}
-            </div>
-            <Link href="/login" className="text-xs font-medium text-brand-600 hover:underline">
+            <Link href="/login" className="whitespace-nowrap text-xs font-medium text-brand-600 hover:underline">
               Switch user
             </Link>
           </div>
