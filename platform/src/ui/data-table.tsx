@@ -70,7 +70,11 @@ export function DataTable({
   const pageRows = visible.slice(current * pageSize, current * pageSize + pageSize);
 
   function exportCsv() {
-    const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    // Prefix formula-leading cells so spreadsheets treat them as text (CSV/formula injection).
+    const esc = (v: unknown) => {
+      const s = String(v ?? "");
+      return `"${(/^[=+\-@\t\r]/.test(s) ? `'${s}` : s).replace(/"/g, '""')}"`;
+    };
     const csv = [columns.map((c) => esc(c.header)).join(","), ...visible.map((r) => columns.map((c) => esc(r.values[c.key])).join(","))].join("\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     const a = Object.assign(document.createElement("a"), { href: url, download: `${exportName ?? "export"}.csv` });
