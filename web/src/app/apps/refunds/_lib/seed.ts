@@ -32,6 +32,9 @@ export function seedRefunds(db: Db) {
         { groupId: "g_support", roleKey: "refunds.agent" },
         { groupId: "g_payments", roleKey: "refunds.approver" },
         { groupId: "g_finance", roleKey: "refunds.finance" },
+        // Demo superuser. Not refunds.agent: it conflicts with refunds.finance (SoD).
+        { groupId: "g_demo_superusers", roleKey: "refunds.approver" },
+        { groupId: "g_demo_superusers", roleKey: "refunds.finance" },
       ])
       .run();
 

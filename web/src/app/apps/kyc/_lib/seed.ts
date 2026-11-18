@@ -50,6 +50,7 @@ export function seedKyc(db: Db) {
       .values([
         { groupId: "g_compliance", roleKey: "kyc.analyst" },
         { groupId: "g_compliance_leads", roleKey: "kyc.lead" },
+        { groupId: "g_demo_superusers", roleKey: "kyc.lead" },
       ])
       .run();
 

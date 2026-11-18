@@ -55,8 +55,7 @@ export function seedDirectory(db: Db) {
     tx.insert(groupRoles)
       .values([
         { groupId: "g_internal_audit", roleKey: "platform.auditor" },
-        // Demo superuser: every admin/approver role. Not refunds.agent, which would conflict with refunds.finance (SoD).
-        ...["platform.auditor", "refunds.approver", "refunds.finance", "kyc.lead"].map((roleKey) => ({ groupId: "g_demo_superusers", roleKey })),
+        { groupId: "g_demo_superusers", roleKey: "platform.auditor" },
       ])
       .run();
   });
