@@ -1,0 +1,11 @@
+---
+trigger: Writing any code that changes data, moves money, shows customer data, or changes access in the acme internal tools repo
+---
+- Audit: every mutation calls `audit(tx, …)` inside the same `db.transaction` as the change. `audit_events` is append-only (DB triggers) and hash-chained; never try to update or delete it.
+- Four-eyes: approval/payout transitions use `makerChecker: true`. Never add an override path that lets a maker approve their own item.
+- Approval limits: express amount-based authority with `approvalTier()` and tiered permissions, never `if (user.role === …)`.
+- Money: integer minor units + currency. Parse input with `moneyField`/`parseMoneyToMinor`. No `parseFloat`, no float arithmetic.
+- External money movement goes through a connector and `runIdempotent()` with a stable key.
+- PII (SSN, DOB, email, phone, account numbers, addresses) is masked on the server with `maskPii` before it reaches React. Revealing uses `revealPii` (permission + reason + audit event).
+- Row-level security: list queries use `rowScope()` or an explicit scope filter; detail loaders return null (404) for out-of-scope records.
+- Segregation of duties: if two roles must never be held together, declare them in the manifest's `sodConflicts`.
