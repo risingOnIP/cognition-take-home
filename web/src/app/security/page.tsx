@@ -1,6 +1,6 @@
 import { groupRoles, groups } from "@acme/platform/db";
 import { can, findSodViolations } from "@acme/platform/rbac";
-import { Alert, Badge, Card, PageHeader, SchemaForm } from "@acme/platform/ui";
+import { Alert, Badge, Card, DataTable, PageHeader, SchemaForm } from "@acme/platform/ui";
 import { RealVsSimulated } from "@/components/real-vs-simulated";
 import { catalog, db, requirePageAccess } from "@/platform";
 import { grantRole, revokeRole } from "./actions";
@@ -32,21 +32,20 @@ export default async function SecurityPage() {
         )}
         <div className="grid gap-6 lg:grid-cols-3">
           <Card title="Group → roles" className="lg:col-span-2">
-            <table className="w-full text-left text-sm">
-              <tbody>
-                {allGroups.map((g) => {
-                  const roles = assignments.filter((a) => a.groupId === g.id);
-                  return (
-                    <tr key={g.id} className="border-t border-line first:border-0">
-                      <td className="py-2.5 pr-4 font-medium">{g.name}</td>
-                      <td className="py-2.5">
-                        <div className="flex flex-wrap gap-1">{roles.length ? roles.map((a) => <Badge key={a.roleKey} tone="brand">{roleName(a.roleKey)}</Badge>) : <span className="text-xs text-muted">No roles</span>}</div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <DataTable
+              columns={[
+                { key: "group", header: "Entra group" },
+                { key: "roles", header: "Roles", filter: true },
+              ]}
+              rows={allGroups.map((g) => {
+                const roles = assignments.filter((a) => a.groupId === g.id).map((a) => roleName(a.roleKey));
+                return {
+                  id: g.id,
+                  values: { group: g.name, roles: roles.join(", ") || "No roles" },
+                  display: { roles: <div className="flex flex-wrap gap-1">{roles.length ? roles.map((r) => <Badge key={r} tone="brand">{r}</Badge>) : <span className="text-xs text-muted">No roles</span>}</div> },
+                };
+              })}
+            />
           </Card>
           {canManage ? (
             <div className="space-y-6">
