@@ -9,9 +9,7 @@
     "node": ">=22.13"
   },
   "scripts": {
-    "presetup": "node scripts/check-node.cjs",
-    "setup": "npm run db:reset",
-    "predev": "node scripts/check-node.cjs",
+    "setup": "npm run setup -w web",
     "dev": "npm run dev -w web",
     "build": "npm run build -w web",
     "start": "npm run start -w web",

@@ -9,7 +9,7 @@
 
 ## Procedure
 1. Read `AGENTS.md` and `devin/knowledge/*.md`. Look at `web/src/app/apps/refunds/` (money + approvals) and `web/src/app/apps/kyc/` (queue + PII) as reference apps.
-2. `npm install && npm run setup`, then create a branch.
+2. From `web/`: `npm install && npm run setup`, then create a branch. Run the commands below from `web/` too.
 3. Scaffold: `npm run new-app -- <key> "<Name>"`.
 4. `manifest.ts`: declare permissions (`<key>.<verb>`), roles (`<key>.<role>`) and any `sodConflicts`. Keep to 2–3 roles; give `<key>.admin` to the owner role (see `access-management.md`). The scaffold adds `/apps/<key>/admin` (Access + Activity tabs).
 5. `_lib/schema.ts`: tables prefixed with the app key. Money is `integer` minor units. Store the maker in `createdBy`. If the maker is someone else (e.g. whoever escalated), pass `{ ...record, createdBy: maker }` to the workflow checks, as `web/src/app/apps/kyc/` does.

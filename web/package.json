@@ -2,7 +2,13 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
+    "presetup": "node scripts/check-node.mjs",
+    "setup": "npm run db:reset",
+    "predev": "node scripts/check-node.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

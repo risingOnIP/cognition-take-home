@@ -1,12 +1,23 @@
 import fs from "node:fs";
 import path from "node:path";
-import { findRepoRoot } from "@acme/platform/db";
 
 export interface RepoDoc {
   file: string;
   title: string;
   meta: Record<string, string>;
   body: string;
+}
+
+/** The portal renders repo-level docs (devin/, docs/); find the workspace root (package.json with `workspaces`). */
+function findRepoRoot(start = process.cwd()): string {
+  let dir = start;
+  while (true) {
+    const pkg = path.join(dir, "package.json");
+    if (fs.existsSync(pkg) && JSON.parse(fs.readFileSync(pkg, "utf8")).workspaces) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return start;
+    dir = parent;
+  }
 }
 
 const root = () => findRepoRoot();

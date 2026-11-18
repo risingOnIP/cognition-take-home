@@ -3,21 +3,9 @@ import path from "node:path";
 import Database from "better-sqlite3";
 import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
-/** Walks up from cwd to the workspace root (the package.json that declares `workspaces`). */
-export function findRepoRoot(start = process.cwd()): string {
-  let dir = start;
-  while (true) {
-    const pkg = path.join(dir, "package.json");
-    if (fs.existsSync(pkg) && JSON.parse(fs.readFileSync(pkg, "utf8")).workspaces) return dir;
-    const parent = path.dirname(dir);
-    if (parent === dir) return start;
-    dir = parent;
-  }
-}
-
-/** Defaults to `<repo>/data/app.db` so the project runs with zero env configuration. */
+/** `DATABASE_PATH`, or `data/app.db` inside the host app (its working directory), so it runs with zero env configuration. */
 export function resolveDatabasePath(): string {
-  return process.env.DATABASE_PATH ?? path.join(findRepoRoot(), "data", "app.db");
+  return process.env.DATABASE_PATH ?? path.join(process.cwd(), "data", "app.db");
 }
 
 export function openDatabase(file = resolveDatabasePath()): Database.Database {

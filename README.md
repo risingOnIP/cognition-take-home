@@ -4,11 +4,16 @@ A proof of concept for a ~60-engineer fintech that runs a KYC queue, a refunds d
 Microsoft Power Apps and plans 10+ more internal tools. It tests one question: **if engineers build these tools in code
 with Devin, can each new app be cheap to build and still governed as well as Power Apps?**
 
-It has two parts:
+There is a **platform** that makes every future app quick and consistent to build, and a **demo web app** that hosts the apps built on it.
 
-- **`platform/`** (`@acme/platform`): the shared primitives every app uses: identity, groups/roles, audit, approvals, PII, money, UI.
-- **`web/`**: one Next.js host. Each internal app is a folder in `web/src/app/apps/<key>/` built only from platform primitives.
-- **`devin/`**: the knowledge, playbooks and maintenance bots that let Devin build and maintain app #N consistently.
+| Folder | What it is |
+|---|---|
+| `platform/` | The shared primitives (`@acme/platform`): Entra identity, group → role → permission checks, audit log, approvals, PII masking, money, connectors, UI kit. Imported by every app. |
+| `web/` | The demo: one Next.js app with the platform portal and every internal app at `/apps/<key>`. Everything you run lives here, including its database (`web/data/`), migrations (`web/drizzle/`) and scripts (`web/scripts/`). |
+| `devin/` | What Devin follows to build and maintain apps: `knowledge/` (rules), `playbooks/` (procedures), `bots/` (scheduled maintenance). |
+| `docs/` | Build log and metrics (how long each app took), and the strategy note. |
+
+Hidden: `.agents/skills/` (Devin skill for new apps) and `.github/` (CI, CODEOWNERS). `AGENTS.md` holds the rules every app follows.
 
 ## Run it
 
@@ -17,17 +22,18 @@ It has two parts:
 - Windows: `winget upgrade OpenJS.NodeJS.LTS` (or download the LTS installer from https://nodejs.org)
 - macOS/Linux with nvm: `nvm install` (reads `.nvmrc`)
 
-No env vars, secrets or external services.
-
-**Windows:** clone outside OneDrive (OneDrive locks `node_modules` and causes `EPERM` errors). `better-sqlite3` downloads a prebuilt binary for supported Node versions; if `npm install` falls back to `node-gyp rebuild` and fails with "Could not find any Visual Studio installation", either update to the latest Node 22 LTS and retry, or install Visual Studio Build Tools with the "Desktop development with C++" workload. Then delete `node_modules` and run `npm install` again.
+**Run every command from the `web/` folder.** No env vars, secrets or external services.
 
 ```bash
-npm install
-npm run setup      # creates data/app.db, runs migrations, seeds deterministic demo data
+cd web
+npm install        # installs web + platform (npm workspaces)
+npm run setup      # creates web/data/app.db, runs migrations, seeds deterministic demo data
 npm run dev        # http://localhost:3000
 ```
 
-`npm run db:reset` restores the demo data at any time. The database is gitignored; everyone gets the same data from the seed.
+`npm run db:reset` (also from `web/`) restores the demo data at any time; restart `npm run dev` afterwards. The database is gitignored; everyone gets the same data from the seed.
+
+**Windows:** clone outside OneDrive (OneDrive locks `node_modules` and causes `EPERM` errors). `better-sqlite3` downloads a prebuilt binary for supported Node versions; if `npm install` falls back to `node-gyp rebuild` and fails with "Could not find any Visual Studio installation", either update to the latest Node 22 LTS and retry, or install Visual Studio Build Tools with the "Desktop development with C++" workload. Then delete `node_modules` and run `npm install` again.
 
 Sign in at `/login` with the user picker (the stand-in for Entra SSO). Suggested walkthrough:
 
@@ -84,6 +90,7 @@ Groups stand in for the company's existing Entra ID groups. Each app's admin map
 ## Adding an app
 
 ```bash
+cd web
 npm run new-app -- chargebacks "Chargebacks"   # scaffolds web/src/app/apps/chargebacks and registers it
 ```
 
@@ -96,17 +103,9 @@ Then follow `devin/playbooks/new-internal-app.md`, or ask Devin to build the app
 - `devin/playbooks/`: new internal app; add a platform primitive; add a maintenance bot.
 - `devin/bots/`: weekly dependency/security sweep, PR guardrail review, docs sync, quarterly access review. Onboarding: `devin/playbooks/add-maintenance-bot.md`, listed at `/bots`.
 
-## Repo layout
-
-```
-platform/src/   auth rbac registry audit workflow pii money idempotency connectors forms ui db testing
-web/src/app/    page.tsx (platform home)  login/  audit/  primitives/  knowledge/  playbooks/  bots/  apps/<key>/{manifest.ts,_lib/,admin/,page.tsx,…}
-web/drizzle/    SQL migrations (one history for platform + app tables)
-web/scripts/    migrate, seed, reset, new-app (+ templates)
-devin/          knowledge/ playbooks/ bots/
-```
-
 ## Checks
+
+CI runs these from the repo root, where they cover both `platform/` and `web/`:
 
 ```bash
 npm run typecheck && npm run lint && npm test && npm run build

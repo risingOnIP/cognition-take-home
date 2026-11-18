@@ -5,7 +5,7 @@ trigger: Working in the acme internal tools repo (platform/ or web/), building o
 - `web/` is the single Next.js host. Apps live in `web/src/app/apps/<key>/` and are registered in `web/src/apps.ts`.
 - `web/src/platform.ts` is the only place the platform is configured (identity provider, connectors). Apps import helpers from `@/platform`.
 - Access model: Entra security group -> role (declared in the app manifest) -> permissions. Group -> role assignments are rows in `group_roles`, seeded in each app's `_lib/seed.ts` and changed by app admins in `/apps/<key>/admin`. The platform-wide `/audit` log is for internal audit only.
-- DB is SQLite via Drizzle. One migration history in `web/drizzle/`. Regenerate with `npm run db:generate -- --name <x>`. Never edit generated SQL except custom migrations.
+- DB is SQLite via Drizzle at `web/data/app.db` (override with `DATABASE_PATH`). One migration history in `web/drizzle/`. Regenerate with `npm run db:generate -- --name <x>`. Never edit generated SQL except custom migrations.
 - Seeds are deterministic (fixed PRNG); `npm run db:reset` rebuilds the DB from scratch.
 - `devin/` holds what Devin follows: `knowledge/` (rules applied automatically), `playbooks/` (step-by-step procedures) and `bots/` (scheduled maintenance sessions, onboarded via `playbooks/add-maintenance-bot.md`).
 - Hosting is not fixed: it is a standard Next.js app plus a database (SQLite for the demo, Postgres/Azure SQL in production).

@@ -15,7 +15,7 @@ Monorepo: `platform/` (`@acme/platform`, shared primitives) and `web/` (Next.js 
 - Don't edit `platform/` while building an app. If a primitive is missing, follow `devin/playbooks/add-platform-primitive.md` in a separate PR.
 
 ## Commands
-`npm install && npm run setup` (migrate + seed), `npm run dev`, `npm test`, `npm run typecheck`, `npm run lint`,
-`npm run db:generate -- --name <name>` after schema changes, `npm run db:reset` to restore demo data.
+Run from `web/`: `npm install && npm run setup` (migrate + seed), `npm run dev`, `npm test`, `npm run typecheck`, `npm run lint`,
+`npm run db:generate -- --name <name>` after schema changes, `npm run db:reset` to restore demo data (database: `web/data/app.db`). From the repo root, `npm run typecheck` and `npm test` cover `platform/` too.
 
 `web/src/conformance.test.ts` enforces the rules above in CI.
