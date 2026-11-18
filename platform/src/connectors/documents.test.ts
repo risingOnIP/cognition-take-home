@@ -26,6 +26,20 @@ describe("SharePoint document store", () => {
   });
 });
 
+describe("SharePoint paging", () => {
+  it("follows @odata.nextLink", async () => {
+    const item = (id: string) => ({ id, name: `${id}.pdf`, size: 1, lastModifiedDateTime: "t", webUrl: "u" });
+    const fetchMock = vi.fn(async (url: string | URL | Request) => {
+      const u = String(url);
+      if (u.includes("oauth2")) return json({ access_token: "tok", expires_in: 3600 });
+      if (u === "https://next") return json({ value: [item("2")] });
+      return json({ value: [item("1")], "@odata.nextLink": "https://next" });
+    });
+    const store = createSharePointDocumentStore({ tenantId: "t", clientId: "c", clientSecret: "s", siteId: "site", fetch: fetchMock as typeof fetch });
+    expect((await store.list("f")).map((d) => d.id)).toEqual(["1", "2"]);
+  });
+});
+
 describe("mock document store", () => {
   it("seeds per folder and accepts uploads", async () => {
     const store = createMockDocumentStore({ seed: (f) => (f === "a" ? [{ name: "x.pdf", sizeBytes: 1, modifiedAt: "t" }] : []) });

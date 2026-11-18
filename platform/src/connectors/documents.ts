@@ -65,10 +65,17 @@ export function createSharePointDocumentStore(cfg: SharePointConfig): DocumentSt
   return {
     name: "sharepoint",
     async list(folder) {
-      const res = await graph(`${drive}/root:/${encodePath(folder)}:/children?$select=id,name,size,lastModifiedDateTime,webUrl`);
-      if (res.status === 404) return [];
-      if (!res.ok) throw new Error(`SharePoint list failed: ${res.status}`);
-      return ((await res.json()) as { value: GraphDriveItem[] }).value.map(toInfo);
+      const out: DocumentInfo[] = [];
+      let next: string | undefined = `${drive}/root:/${encodePath(folder)}:/children?$select=id,name,size,lastModifiedDateTime,webUrl`;
+      while (next) {
+        const res = await graph(next);
+        if (res.status === 404) return [];
+        if (!res.ok) throw new Error(`SharePoint list failed: ${res.status}`);
+        const page = (await res.json()) as { value: GraphDriveItem[]; "@odata.nextLink"?: string };
+        out.push(...page.value.map(toInfo));
+        next = page["@odata.nextLink"];
+      }
+      return out;
     },
     async upload(folder, fileName, content, contentType = "application/octet-stream") {
       const res = await graph(`${drive}/root:/${encodePath(`${folder}/${fileName}`)}:/content`, { method: "PUT", headers: { "content-type": contentType }, body: new Blob([new Uint8Array(content)]) });
