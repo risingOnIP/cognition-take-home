@@ -36,6 +36,19 @@ export function AppAdminView({
       />
       {tab === "access" ? (
         <div className="space-y-4">
+          <Card title="Who administers this app">
+            {(() => {
+              const adminRoles = summary.roles.filter((r) => r.permissions.some((p) => p.endsWith(".admin")));
+              const groups = adminRoles.flatMap((r) => r.groups);
+              return (
+                <p className="text-sm text-slate-700">
+                  The <strong>{adminRoles.map((r) => r.name).join(", ") || "—"}</strong> role includes app admin rights, granted to{" "}
+                  {groups.length ? groups.map((g) => <Badge key={g.name} tone="brand">{g.name}</Badge>) : <span className="text-muted">no group yet</span>}{" "}
+                  ({groups.flatMap((g) => g.members).join(", ") || "nobody"}). Admins map groups to roles below and see the Activity tab.
+                </p>
+              );
+            })()}
+          </Card>
           {summary.sodViolations.length > 0 ? (
             <Alert tone="danger" title="Segregation-of-duties conflict">
               {summary.sodViolations.map((v) => `${v.displayName} holds ${v.roleA} and ${v.roleB}`).join("; ")}. Fix the Entra group membership.
@@ -57,7 +70,9 @@ export function AppAdminView({
                 {summary.roles.map((r) => (
                   <tr key={r.key} className="border-t border-line align-top">
                     <td className="py-3 pr-4">
-                      <div className="font-medium">{r.name}</div>
+                      <div className="font-medium">
+                        {r.name} {r.permissions.some((p) => p.endsWith(".admin")) && <Badge tone="warning">admin</Badge>}
+                      </div>
                       <div className="text-xs text-muted">{r.description}</div>
                     </td>
                     <td className="py-3 pr-4">
