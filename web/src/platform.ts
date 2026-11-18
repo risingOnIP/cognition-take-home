@@ -25,7 +25,8 @@ export const documentStore: DocumentStore =
       })
     : createMockDocumentStore({
         seed: (folder) =>
-          folder.startsWith("refunds/")
+          // Only seeded demo refunds get sample files; refunds created in the app start empty.
+          /^refunds\/RF-10(0[1-9]|10)$/.test(folder)
             ? [
                 { name: "customer-request.eml", sizeBytes: 18_432, modifiedAt: "2026-11-02T14:05:00Z" },
                 { name: "original-payment-receipt.pdf", sizeBytes: 96_311, modifiedAt: "2026-11-02T14:06:00Z" },
