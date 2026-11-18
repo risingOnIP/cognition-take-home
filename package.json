@@ -6,7 +6,7 @@
     "web"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13"
   },
   "scripts": {
     "setup": "npm run db:reset",

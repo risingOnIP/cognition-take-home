@@ -3,10 +3,12 @@
     "app": "refunds",
     "what": "Platform primitives + Refunds app + Devin assets",
     "how": "One Devin session, planned interactively with an engineer",
-    "wallClockMinutes": null,
+    "wallClockMinutes": 38,
     "acus": null,
     "humanInput": "Planning chat and design decisions",
-    "session": "https://app.devin.ai/sessions/dc8b9cb6b30c4cdfb788039a5ec752b1"
+    "session": "https://app.devin.ai/sessions/dc8b9cb6b30c4cdfb788039a5ec752b1",
+    "pr": "https://github.com/risingOnIP/cognition-take-home/pull/1",
+    "notes": "15:18:57 EST session start to 15:57 EST first PR opened (platform primitives, Refunds, Devin assets, CI). Later time in the session was UI and design iteration with the engineer, not counted. ACUs were reported as 0.0 by the API at the time of writing."
   },
   {
     "app": "kyc",
