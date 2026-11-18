@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { audit } from "@acme/platform/audit";
 import { groupMembers, groupRoles, users, type Db } from "@acme/platform/db";
@@ -106,7 +106,7 @@ export function decideCase(db: Db, user: CurrentUser, id: string, transition: Ky
     const updated = tx
       .update(kycCases)
       .set(changes)
-      .where(and(eq(kycCases.id, id), eq(kycCases.status, current.status)))
+      .where(and(eq(kycCases.id, id), eq(kycCases.status, current.status), current.assignedTo ? eq(kycCases.assignedTo, current.assignedTo) : isNull(kycCases.assignedTo)))
       .returning()
       .get();
     if (!updated) throw new WorkflowError("This case was changed by someone else. Reload and try again.");
@@ -147,7 +147,7 @@ export function assignCase(db: Db, user: CurrentUser, id: string, input: z.infer
     const updated = tx
       .update(kycCases)
       .set({ assignedTo: input.assigneeId })
-      .where(and(eq(kycCases.id, id), eq(kycCases.status, current.status)))
+      .where(and(eq(kycCases.id, id), eq(kycCases.status, current.status), current.assignedTo ? eq(kycCases.assignedTo, current.assignedTo) : isNull(kycCases.assignedTo)))
       .returning()
       .get();
     if (!updated) throw new WorkflowError("This case was changed by someone else. Reload and try again.");
