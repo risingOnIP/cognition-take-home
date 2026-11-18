@@ -56,9 +56,9 @@ export default function Home() {
         <section className="mt-14">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {foundations.map((f) => (
-              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition ${f.tone === "bot" ? "border-amber-200 bg-amber-50 hover:border-amber-500" : "border-brand-100 bg-brand-50/60 hover:border-brand-500"}`}>
+              <Link key={f.href} href={f.href} className={`group rounded-2xl border p-5 transition ${f.tone === "bot" ? "border-slate-200 bg-slate-50 hover:border-slate-500" : "border-brand-100 bg-brand-50/60 hover:border-brand-500"}`}>
                 <div className="flex items-baseline justify-between">
-                  <h2 className={`font-semibold ${f.tone === "bot" ? "text-amber-900" : "text-brand-900"}`}>{f.title}</h2>
+                  <h2 className={`font-semibold ${f.tone === "bot" ? "text-slate-900" : "text-brand-900"}`}>{f.title}</h2>
                   <span className="text-brand-700 opacity-0 transition group-hover:opacity-100">→</span>
                 </div>
                 <p className="mt-1 text-sm text-slate-600">{f.what}</p>

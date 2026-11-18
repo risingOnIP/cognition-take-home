@@ -11,7 +11,7 @@ export default function BotsPage() {
         title="Bots"
         description="Devin sessions that run on a schedule or an event to keep the platform and apps maintained. Source: devin/bots/. Defined in the repo; switched on as Devin Automations."
       />
-      <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+      <div className="mb-6 rounded-xl border border-line bg-slate-50 p-4 text-sm text-slate-700">
         <strong>Onboard a bot:</strong> add <code>devin/bots/&lt;name&gt;.md</code> with its type/trigger, repo and prompt (see the &quot;Add a maintenance bot&quot; playbook), open a PR, then create a Devin Automation with that prompt and trigger. Bots open PRs or post reports; they never merge or change production data.
       </div>
       <div className="grid gap-4 md:grid-cols-2">
