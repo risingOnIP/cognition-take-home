@@ -19,7 +19,7 @@ Hidden: `.agents/skills/` (Devin skill for new apps) and `.github/` (CI, CODEOWN
 
 **Minimum Node version: 22.13** (latest Node 22 LTS recommended). Check with `node -v`. `npm install`, `npm run setup` and `npm run dev` stop with a clear message if Node is older. To update:
 
-- Windows: `winget upgrade OpenJS.NodeJS.LTS` (or download the LTS installer from https://nodejs.org)
+- Windows: download the LTS installer from https://nodejs.org
 - macOS/Linux with nvm: `nvm install` (reads `.nvmrc`)
 
 **Run every command from the `web/` folder.** No env vars, secrets or external services.
