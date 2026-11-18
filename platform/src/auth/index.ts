@@ -1,3 +1,4 @@
+import { audit } from "../audit";
 import { eq, inArray } from "drizzle-orm";
 import { groupMembers, groups, users, type Db } from "../db";
 
@@ -72,8 +73,14 @@ export function syncEntraClaims(db: Db, claims: EntraClaims): string {
     const known = claims.groups.length
       ? tx.select({ id: groups.id }).from(groups).where(inArray(groups.entraObjectId, claims.groups)).all()
       : [];
-    tx.delete(groupMembers).where(eq(groupMembers.userId, userId)).run();
-    if (known.length) tx.insert(groupMembers).values(known.map((g) => ({ groupId: g.id, userId }))).run();
+    const before = tx.select({ groupId: groupMembers.groupId }).from(groupMembers).where(eq(groupMembers.userId, userId)).all().map((g) => g.groupId).sort();
+    const after = known.map((g) => g.id).sort();
+    if (before.join() !== after.join()) {
+      tx.delete(groupMembers).where(eq(groupMembers.userId, userId)).run();
+      if (known.length) tx.insert(groupMembers).values(known.map((g) => ({ groupId: g.id, userId }))).run();
+      // Membership drives permissions, so every change is audited (actor: the directory sync).
+      audit(tx, { actorId: "system:entra-sync", app: "platform", action: "membership.sync", entity: { type: "user", id: userId }, before: { groups: before }, after: { groups: after } });
+    }
     return userId;
   });
 }
