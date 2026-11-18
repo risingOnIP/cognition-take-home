@@ -15,6 +15,13 @@
       "when": 1795035282130,
       "tag": "0001_audit_append_only",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1795035598496,
+      "tag": "0002_kyc",
+      "breakpoints": true
     }
   ]
 }
