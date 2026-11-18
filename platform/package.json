@@ -18,7 +18,8 @@
     "./ui": "./src/ui/index.ts",
     "./ui/theme.css": "./src/ui/theme.css",
     ".": "./src/index.ts",
-    "./testing": "./src/testing/index.ts"
+    "./testing": "./src/testing/index.ts",
+    "./catalog": "./src/catalog/index.ts"
   },
   "scripts": {
     "test": "vitest run",

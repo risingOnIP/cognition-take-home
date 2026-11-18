@@ -1,0 +1,20 @@
+[
+  {
+    "app": "refunds",
+    "what": "Platform primitives + Refunds app + Devin assets",
+    "how": "One Devin session, planned interactively with an engineer",
+    "wallClockMinutes": null,
+    "acus": null,
+    "humanInput": "Planning chat and design decisions",
+    "session": "https://app.devin.ai/sessions/dc8b9cb6b30c4cdfb788039a5ec752b1"
+  },
+  {
+    "app": "kyc",
+    "what": "KYC review queue",
+    "how": "Separate Devin session given only the playbook and a one-paragraph brief",
+    "wallClockMinutes": null,
+    "acus": null,
+    "humanInput": "None during the build",
+    "session": "https://app.devin.ai/sessions/a6e30c4f325d411ea0c41c6779d48cd4"
+  }
+]

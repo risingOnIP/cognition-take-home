@@ -1,4 +1,4 @@
-# Bot: docs & app catalog sync
+# Bot: Docs & app catalog sync
 
 - **Type:** Devin Automation, triggered on merge to `main` when `web/src/apps.ts` or any `manifest.ts` changes
 - **Repo:** cognition-take-home

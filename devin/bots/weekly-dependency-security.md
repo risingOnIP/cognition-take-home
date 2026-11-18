@@ -1,4 +1,4 @@
-# Bot: weekly dependency & security sweep
+# Bot: Weekly dependency & security sweep
 
 - **Type:** Devin Automation, scheduled
 - **Schedule:** Mondays 09:00 ET

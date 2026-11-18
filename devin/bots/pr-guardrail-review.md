@@ -1,4 +1,4 @@
-# Bot: guardrail review on every PR
+# Bot: Guardrail review on every PR
 
 - **Type:** Devin Review, on pull requests (plus the CI conformance tests, which are deterministic)
 - **Scope:** `web/src/app/apps/**`, `platform/**`

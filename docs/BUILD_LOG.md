@@ -1,8 +1,12 @@
 # Build log
 
-How long each part took and what it cost in Devin usage. This is the evidence for the "cost per additional app" estimate.
+Wall-clock time and Devin usage for each part. This is the evidence behind the "cost per additional app" estimate.
+The numbers live in `docs/build-metrics.json` and are rendered on the `/apps` overview page.
 
-| # | What | How | Wall-clock | ACUs | Human input | Link |
-|---|---|---|---|---|---|---|
-| 1 | Platform + Refunds app + Devin assets | One Devin session, planned with the user | TBD | TBD | Planning chat, design decisions | TBD |
-| 2 | KYC review app | Separate Devin session, given only the playbook and a one-paragraph brief | TBD | TBD | None during the build | TBD |
+## Notes per build
+
+### 1. Platform + Refunds
+Built first, together, on purpose: the primitives were extracted from a real app instead of designed in the abstract.
+
+### 2. KYC review queue
+Built by a separate Devin session that only had the repo, `devin/playbooks/new-internal-app.md` and a one-paragraph brief.

@@ -1,4 +1,4 @@
-# Bot: quarterly access review
+# Bot: Quarterly access review
 
 - **Type:** Devin Automation, scheduled on the 1st of each quarter
 - **Repo:** cognition-take-home
