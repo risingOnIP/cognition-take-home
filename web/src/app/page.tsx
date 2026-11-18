@@ -16,7 +16,7 @@ const groups: PrimitiveGroup[] = [
   { key: "money", title: "Money & payouts", blurb: "Integer cents, run-once payouts", items: pick("Money safety", "Idempotent side effects") },
   { key: "connectors", title: "Connectors", blurb: "SharePoint documents, payment processor", items: pick("SharePoint documents", "Payment connector") },
   { key: "ui", title: "UI kit", blurb: "Tables, forms, app shell", items: pick("Data tables", "Forms & business rules", "Shell & theme", "App registry & launcher") },
-  { key: "delivery", title: "Guardrails & delivery", blurb: "CI checks, PR review, migrations", items: pick("Guardrails in CI", "ALM") },
+  { key: "guardrails", title: "CI guardrails", blurb: "Build fails if an app skips a control", items: pick("Guardrails in CI") },
 ];
 
 const steps = [
@@ -90,8 +90,8 @@ export default function Home() {
             ))}
           </ol>
           <p className="mt-6 text-center text-sm">
-            <Link href="/devin" className="text-brand-700 hover:underline">
-              See the Devin playbook, knowledge and maintenance bots →
+            <Link href="/playbooks" className="text-brand-700 hover:underline">
+              See the playbooks Devin follows →
             </Link>
           </p>
         </section>

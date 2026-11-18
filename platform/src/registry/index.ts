@@ -38,13 +38,13 @@ export function defineApp<const M extends AppManifest>(manifest: M): M {
 /** Built-in app: directory, access management and the audit trail. */
 export const platformAdminApp = defineApp({
   key: "admin",
-  name: "Access & Audit",
-  description: "Directory, group-to-role assignments, segregation-of-duties checks and the audit trail.",
-  href: "/admin",
+  name: "Security",
+  description: "Assign Entra groups to roles, review who has access, segregation-of-duties checks and the audit trail.",
+  href: "/security",
   owner: "Platform Engineering",
   accessPermission: "admin.view",
   permissions: {
-    "admin.view": "Open the Access & Audit app",
+    "admin.view": "Open Security",
     "admin.roles.manage": "Assign or remove roles on groups",
     "audit.view": "Read the audit trail",
   },

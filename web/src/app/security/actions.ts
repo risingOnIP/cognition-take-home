@@ -23,7 +23,7 @@ export async function grantRole(_: FormState, formData: FormData): Promise<FormS
     tx.insert(groupRoles).values({ groupId, roleKey }).onConflictDoNothing().run();
     audit(tx, { actorId: user.id, app: "admin", action: "role.grant", entity: { type: "group", id: groupId }, after: { roleKey }, reason });
   });
-  revalidatePath("/admin");
+  revalidatePath("/security");
   return { status: "success", message: `Granted ${roleKey}.` };
 }
 
@@ -37,6 +37,6 @@ export async function revokeRole(_: FormState, formData: FormData): Promise<Form
     tx.delete(groupRoles).where(and(eq(groupRoles.groupId, groupId), eq(groupRoles.roleKey, roleKey))).run();
     audit(tx, { actorId: user.id, app: "admin", action: "role.revoke", entity: { type: "group", id: groupId }, before: { roleKey }, reason });
   });
-  revalidatePath("/admin");
+  revalidatePath("/security");
   return { status: "success", message: `Revoked ${roleKey}.` };
 }

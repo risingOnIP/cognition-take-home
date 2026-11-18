@@ -6,3 +6,6 @@ export { WorkflowActions, type WorkflowActionOption } from "./workflow-actions";
 export { MaskedValue } from "./masked-value";
 export { AuditTimeline } from "./audit-timeline";
 export { AppAdminView } from "./app-admin-view";
+export { AuditLogTable } from "./audit-log-table";
+export { TabNav } from "./tab-nav";
+export type { AppAdminTab } from "./app-admin-view";

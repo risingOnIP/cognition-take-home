@@ -1,0 +1,10 @@
+---
+trigger: Building or changing any page or component in an internal app
+---
+- One job per page. If a page does two things (e.g. access and activity), split it into tabs with `TabNav`; tabs are links (`?tab=` or sub-routes).
+- Every list uses `DataTable` (or `AuditLogTable` for audit events): search, column filters, pagination and CSV export come with it. Never render an unbounded list.
+- Long content scrolls inside its own panel (DataTable caps at 32rem with a sticky header); the page itself should not grow without limit.
+- Put filters on the columns people actually slice by: person, status, app, action.
+- Lead each page with a `PageHeader` that says what the page is for in one sentence. Use breadcrumbs for sub-pages.
+- Status feedback in plain words: "✓ No segregation-of-duties conflicts" beats an empty section.
+- Hide actions the user can't perform (`can(user, ...)`), but always enforce on the server too.

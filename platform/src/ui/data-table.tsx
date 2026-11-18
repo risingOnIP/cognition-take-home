@@ -126,9 +126,10 @@ export function DataTable({
           )}
         </div>
       </div>
-      <div className="overflow-x-auto">
+      {/* Scroll stays inside the table so long lists never stretch the page. */}
+      <div className="max-h-[32rem] overflow-auto">
         <table className="w-full text-sm">
-          <thead>
+          <thead className="sticky top-0 z-10 bg-surface">
             <tr className="border-b border-line bg-slate-50 text-left text-xs uppercase tracking-wide text-muted">
               {columns.map((c) => (
                 <th key={c.key} className={cx("px-4 py-2 font-medium", c.align === "right" && "text-right")}>

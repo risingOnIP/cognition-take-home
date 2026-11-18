@@ -34,7 +34,7 @@ export const DIRECTORY = {
     g_refunds_leads: ["u_marcus"],
     g_payments_managers: ["u_elena"],
     // Taylor is intentionally also in finance ops: a segregation-of-duties violation the admin app flags.
-    g_finance_ops: ["u_sam", "u_taylor"],
+    g_finance_ops: ["u_sam"],
     g_kyc_analysts: ["u_grace"],
     g_kyc_leads: ["u_diego"],
   } as Record<string, string[]>,

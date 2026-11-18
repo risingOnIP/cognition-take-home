@@ -7,12 +7,14 @@ import { Badge } from "./primitives";
 /** Shared chrome: launcher nav filtered by permission, signed-in identity, roles and environment banner. */
 export function AppShell({
   user,
+  platformNav = [],
   apps,
   orgName = "Acme Pay",
   environment,
   children,
 }: {
   user: CurrentUser;
+  platformNav?: { href: string; label: string }[];
   apps: AppManifest[];
   orgName?: string;
   environment?: string;
@@ -29,21 +31,18 @@ export function AppShell({
           </span>
         </Link>
         <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
-          <Link href="/" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
-            Platform
-          </Link>
-          <Link href="/primitives" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
-            Primitives
-          </Link>
-          <Link href="/devin" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
-            Devin setup
-          </Link>
-          <Link href="/apps" className="block rounded-md px-3 py-2 text-sm font-medium text-ink hover:bg-slate-100">
+          <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-muted">Platform</div>
+          {platformNav.map((l) => (
+            <Link key={l.href} href={l.href} className="block rounded-md px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-ink">
+              {l.label}
+            </Link>
+          ))}
+          <div className="px-3 pb-1 pt-5 text-[11px] font-semibold uppercase tracking-wider text-muted">Apps</div>
+          <Link href="/apps" className="block rounded-md px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-ink">
             All apps
           </Link>
-          <div className="px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-muted">Your apps</div>
           {apps.map((a) => (
-            <Link key={a.key} href={a.href} className="block rounded-md px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-ink">
+            <Link key={a.key} href={a.href} className="block rounded-md px-3 py-2 pl-6 text-sm text-slate-700 hover:bg-slate-100 hover:text-ink">
               {a.name}
             </Link>
           ))}

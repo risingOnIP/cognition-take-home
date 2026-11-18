@@ -41,6 +41,6 @@ export function appAccessSummary(db: DbOrTx, catalog: RoleCatalog, app: AppManif
         .map((g) => ({ name: g.groupName, members: members.filter((m) => m.groupId === g.groupId).map((m) => m.displayName) })),
     })),
     sodViolations: findSodViolations(db, catalog).filter((v) => appRoleKeys.has(v.roleA) || appRoleKeys.has(v.roleB)),
-    recentActivity: listAuditEvents(db, { app: app.key, limit: opts.activityLimit ?? 20 }),
+    recentActivity: listAuditEvents(db, { app: app.key, limit: opts.activityLimit ?? 500 }),
   };
 }
