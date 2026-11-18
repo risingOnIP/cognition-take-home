@@ -8,6 +8,8 @@ import { availableKyc } from "./_lib/workflow";
 import { RiskBadge, ScreeningBadges } from "./_lib/ui";
 import { kycApp } from "./manifest";
 
+const formatDue = (iso: string) => new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+
 export default async function KycQueuePage() {
   const user = await requirePageAccess(kycApp.accessPermission);
   const { rows, stats } = kycQueue(db(), user);
@@ -28,7 +30,7 @@ export default async function KycQueuePage() {
       {stats.breached > 0 && (
         <div className="mb-4">
           <Alert tone="danger" title={`${stats.breached} open case${stats.breached === 1 ? "" : "s"} past SLA`}>
-            Breached cases are highlighted in the SLA column. Sort by SLA to work them first.
+            Breached cases are highlighted in the SLA column. The queue lists them first; sort by Due to re-order.
           </Alert>
         </div>
       )}
@@ -51,6 +53,7 @@ export default async function KycQueuePage() {
           { key: "screening", header: "Screening", filter: true },
           { key: "status", header: "Status", filter: true },
           { key: "assignee", header: "Assigned to", filter: true },
+          { key: "due", header: "Due" },
           { key: "sla", header: "SLA" },
         ]}
         rows={rows.map((c) => {
@@ -68,8 +71,8 @@ export default async function KycQueuePage() {
               screening,
               status: c.status,
               assignee: c.assignedTo ? (names[c.assignedTo] ?? c.assignedTo) : "Unassigned",
-              // Sort key: open cases by hours left (breaches first); closed cases last.
-              sla: sla.tone === "neutral" ? 1_000_000 : Math.round(sla.hoursLeft),
+              due: c.slaDueAt,
+              sla: sla.label,
             },
             display: {
               id: <span className={sla.tone === "danger" ? "font-semibold text-rose-700" : undefined}>{c.id}</span>,
@@ -78,6 +81,7 @@ export default async function KycQueuePage() {
               screening: <ScreeningBadges sanctions={c.sanctionsHit} pep={c.pepHit} />,
               status: <StatusBadge status={c.status} />,
               assignee: c.assignedTo ? (names[c.assignedTo] ?? c.assignedTo) : <Badge tone="warning">Unassigned</Badge>,
+              due: formatDue(c.slaDueAt),
               sla: <Badge tone={sla.tone}>{sla.label}</Badge>,
             },
           };
