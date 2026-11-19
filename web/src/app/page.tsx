@@ -47,14 +47,12 @@ const powerAppsTradeoffs = [
   { feature: "Copilot in Power Apps", response: "Copilot stays inside Power Apps. Devin writes and maintains code you own." },
 ];
 
-const demoRoute = ["/apps", "/bots", "/audit", "/"];
-
 const recommendationFactors = [
-  { title: "Build cost", href: "/apps", text: "Instead of the $250K/year Power Apps license estimate, budget for a brief, Devin time, and a review per app." },
-  { title: "Maintenance", href: "/bots", text: "Maintenance moves in-house. Devin bots handle routine work; your team approves changes." },
-  { title: "Security", href: "/audit", text: "Your team owns security. Host on Azure or AWS; auditor access and audit logging are built in." },
-  { title: "Engineering time", href: "/", text: "No Power Fx. Engineers write briefs and review PRs, then spend more time on product and business priorities instead of internal tools." },
-  { title: "Risk", text: "Give one engineer explicit ownership for a fraction of their time. You own the code, so you’re not locked into Power Apps." },
+  { title: "Build cost", text: "Instead of the $250K/year Power Apps license estimate, budget for a brief, Devin time, and a review per app." },
+  { title: "Maintenance", text: "Maintenance moves in-house. Devin bots handle routine work; your team approves changes." },
+  { title: "Security", text: "Your team owns security. Host on Azure or AWS; auditor access and audit logging are built in." },
+  { title: "Engineering time", text: "No Power Fx. Engineers write briefs and review PRs, then spend more time on product and business priorities instead of internal tools." },
+  { title: "Risk", text: "Give one engineer explicit ownership for a fraction of their time. The code is yours; any engineer can maintain it without Devin." },
 ];
 
 const delta = [
@@ -189,26 +187,13 @@ export default function Home() {
         </section>
 
         <section className="mt-16" aria-labelledby="recommendation-heading">
-          <h2 id="recommendation-heading" className="text-center text-lg font-semibold">5. Recommendation: build with Devin vs buy Power Apps</h2>
-          <nav aria-label="Demo walkthrough" className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm">
-            <span className="text-muted">Show:</span>
-            <ol className="flex flex-wrap items-center gap-2">
-              {demoRoute.map((href, i) => (
-                <li key={href} className="flex items-center gap-2">
-                  {i > 0 && <span aria-hidden="true" className="text-muted">→</span>}
-                  <Link href={href} className="font-mono text-brand-700 underline underline-offset-2">{href}</Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
+          <h2 id="recommendation-heading" className="text-center text-lg font-semibold">Recommendation: build with Devin vs buy Power Apps</h2>
           <div className="mt-6 rounded-xl border border-line bg-surface p-5 text-sm">
             <p className="font-semibold">Build with Devin. How I weighed it:</p>
             <dl className="mt-2 divide-y divide-line">
-              {recommendationFactors.map(({ title, href, text }) => (
+              {recommendationFactors.map(({ title, text }) => (
                 <div key={title} className="grid gap-1 py-2.5 sm:grid-cols-[9rem_1fr]">
-                  <dt className="font-medium">
-                    {href ? <Link href={href} className="text-brand-700 underline underline-offset-2">{title}</Link> : title}
-                  </dt>
+                  <dt className="font-medium">{title}</dt>
                   <dd className="text-slate-600">{text}</dd>
                 </div>
               ))}
