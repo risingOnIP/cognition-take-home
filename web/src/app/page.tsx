@@ -41,6 +41,22 @@ const steps = [
   { title: "Maintain with Devin bots", text: "Scheduled bots patch dependencies, review every PR against the guardrails and run quarterly access reviews." },
 ];
 
+const powerAppsTradeoffs = [
+  { feature: "Mobile app for everyone", response: "These are desk tools. Devin can build a mobile app if needed." },
+  { feature: "Low-code tools for non-engineers", response: "Your builders are engineers. A brief to Devin is faster for this team." },
+  { feature: "Copilot in Power Apps", response: "Copilot stays inside Power Apps. Devin writes and maintains code you own." },
+];
+
+const demoRoute = ["/apps", "/bots", "/audit", "/"];
+
+const recommendationFactors = [
+  { title: "Build cost", href: "/apps", text: "Instead of the $250K/year Power Apps license estimate, budget for a brief, Devin time, and a review per app." },
+  { title: "Maintenance", href: "/bots", text: "Maintenance moves in-house. Devin bots handle routine work; your team approves changes." },
+  { title: "Security", href: "/audit", text: "Your team owns security. Host on Azure or AWS; auditor access and audit logging are built in." },
+  { title: "Engineering time", href: "/", text: "No Power Fx. Engineers write briefs and review PRs, then spend more time on product and business priorities instead of internal tools." },
+  { title: "Risk", text: "Give one engineer explicit ownership for a fraction of their time. You own the code, so you’re not locked into Power Apps." },
+];
+
 const delta = [
   {
     title: "Access (AAA)",
@@ -141,6 +157,66 @@ export default function Home() {
               </li>
             ))}
           </ol>
+        </section>
+
+        <section className="mt-16" aria-labelledby="replicability-heading">
+          <h2 id="replicability-heading" className="text-center text-lg font-semibold">What&apos;s replicable with Devin vs not</h2>
+          <div className="mt-6 grid gap-4 text-sm md:grid-cols-2">
+            <div className="rounded-xl border border-line bg-surface p-5">
+              <h3 className="font-semibold">Replicable</h3>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-slate-600">
+                <li>
+                  Entra roles, approvals, audit, and PII masking, plus the{" "}
+                  <Link href="/primitives#fintech" className="font-medium text-brand-700 underline underline-offset-2">Fintech controls</Link>{" "}
+                  Power Apps leaves to you.
+                </li>
+                <li>SharePoint through Microsoft Graph.</li>
+                <li>Teams as a tab.</li>
+              </ul>
+            </div>
+            <div className="rounded-xl border border-line bg-surface p-5">
+              <h3 className="font-semibold">Not replicable as-is</h3>
+              <dl className="mt-3 space-y-3">
+                {powerAppsTradeoffs.map(({ feature, response }) => (
+                  <div key={feature}>
+                    <dt className="font-medium">{feature}</dt>
+                    <dd className="text-slate-600">{response}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16" aria-labelledby="recommendation-heading">
+          <h2 id="recommendation-heading" className="text-center text-lg font-semibold">5. Recommendation: build with Devin vs buy Power Apps</h2>
+          <nav aria-label="Demo walkthrough" className="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm">
+            <span className="text-muted">Show:</span>
+            <ol className="flex flex-wrap items-center gap-2">
+              {demoRoute.map((href, i) => (
+                <li key={href} className="flex items-center gap-2">
+                  {i > 0 && <span aria-hidden="true" className="text-muted">→</span>}
+                  <Link href={href} className="font-mono text-brand-700 underline underline-offset-2">{href}</Link>
+                </li>
+              ))}
+            </ol>
+          </nav>
+          <div className="mt-6 rounded-xl border border-line bg-surface p-5 text-sm">
+            <p className="font-semibold">Build with Devin. How I weighed it:</p>
+            <dl className="mt-2 divide-y divide-line">
+              {recommendationFactors.map(({ title, href, text }) => (
+                <div key={title} className="grid gap-1 py-2.5 sm:grid-cols-[9rem_1fr]">
+                  <dt className="font-medium">
+                    {href ? <Link href={href} className="text-brand-700 underline underline-offset-2">{title}</Link> : title}
+                  </dt>
+                  <dd className="text-slate-600">{text}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 rounded-lg bg-slate-50 p-3 text-slate-600">
+              <strong className="text-slate-900">When I&apos;d say buy instead:</strong> If no one can own the platform, or non-engineers need to build their own tools.
+            </p>
+          </div>
         </section>
 
         <section className="mt-16">
