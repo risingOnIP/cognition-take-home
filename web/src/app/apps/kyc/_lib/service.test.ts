@@ -137,10 +137,10 @@ describe("kyc service", () => {
     expect(caseSla({ status: "rejected", slaDueAt: due, decidedAt: new Date(NOW + HOUR).toISOString() }).state).toBe("missed");
 
     const { db, lead } = await setup();
-    insertCase(db, { slaDueAt: new Date(Date.now() - HOUR).toISOString() });
+    insertCase(db, { slaDueAt: new Date(NOW - HOUR).toISOString() });
     insertCase(db, { assignedTo: null });
-    insertCase(db, { status: "approved", decidedBy: "analyst", decidedAt: new Date().toISOString() });
-    const rows = listCases(db, lead);
+    insertCase(db, { status: "approved", decidedBy: "analyst", decidedAt: new Date(NOW).toISOString() });
+    const rows = listCases(db, lead, NOW);
     expect(rows[0]!.sla.state).toBe("breached");
     expect(rows.at(-1)!.status).toBe("approved");
     expect(queueStats(rows)).toMatchObject({ open: 2, breached: 1, unassigned: 1, closed: 1 });
