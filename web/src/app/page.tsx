@@ -42,9 +42,9 @@ const steps = [
 ];
 
 const powerAppsTradeoffs = [
-  { feature: "Mobile app for everyone", response: "These are desk tools. Devin can build a mobile app if needed." },
+  { feature: "Managed hosting and maintenance", response: "Microsoft no longer runs it for you. Host on Azure or AWS; Devin bots handle patching." },
   { feature: "Low-code tools for non-engineers", response: "Your builders are engineers. A brief to Devin is faster for this team." },
-  { feature: "Copilot in Power Apps", response: "Copilot stays inside Power Apps. Devin writes and maintains code you own." },
+  { feature: "Mobile app for everyone", response: "These are desk tools. Devin can build a mobile app if needed." },
 ];
 
 const recommendationFactors = [
@@ -164,12 +164,12 @@ export default function Home() {
               <h3 className="font-semibold">Replicable</h3>
               <ul className="mt-3 list-disc space-y-2 pl-5 text-slate-600">
                 <li>
-                  Entra roles, approvals, audit, and PII masking, plus the{" "}
+                  Entra sign-in and roles, a governed platform, approvals and audit: built into the shared primitives, plus the{" "}
                   <Link href="/primitives#fintech" className="font-medium text-brand-700 underline underline-offset-2">Fintech controls</Link>{" "}
                   Power Apps leaves to you.
                 </li>
-                <li>SharePoint through Microsoft Graph.</li>
-                <li>Teams as a tab.</li>
+                <li>Focus only on logic: the primitives handle the plumbing, so Devin writes just each app&apos;s business logic.</li>
+                <li>Connectors: SharePoint through Microsoft Graph; others built once, then reused by every app.</li>
               </ul>
             </div>
             <div className="rounded-xl border border-line bg-surface p-5">
